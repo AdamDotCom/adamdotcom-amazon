@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<project name="AdamDotCom.Amazon" default="all">
+
+	<property name="nant.settings.currentframework" value="net-3.5" />	
+	
+	<target name="all" depends="compile test"/>
+	
+	<target name="init" description="performs the initializations for a build" depends="clean">
+		<mkdir dir="build"/>
+	</target>
+	
+	<target name="clean" description="removes all generated build products">
+		<delete dir="build" if="${directory::exists('build')}" />
+	</target>
+	
+	<target name="compile" description="compiles the library DLLs used by the application" depends="init">
+		<csc target="library" output="build\AdamDotCom.Amazon.dll" debug="false" warninglevel="0" >
+			<sources>
+				<include name="src\AdamDotCom.Amazon.Application\**\*.cs"/>
+				<include name="src\AdamDotCom.Amazon.WebServiceTranslator\**\*.cs"/>
+				<include name="src\AdamDotCom.Amazon.Domain\**\*.cs"/>
+				<include name="src\AdamDotCom.Amazon.DTO\**\*.cs"/>
+			</sources>
+		</csc>
+	</target>
+
+	<target name="test.prepare" description="prepares the test folder to execute tests - this is shared by the test and test.ncover targets" >
+		<copy todir="build" flatten="true">
+			<fileset basedir="3rdParty\nunit\bin">
+				<include name="*.dll" />
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="test.compile" description="compiles the unit tests" depends="compile test.prepare">
+		<csc target="library" output="build\${project::get-name()}.UnitTests.dll" debug="false">
+			<references>
+				<include name="build\*.dll" />
+			</references>
+			<sources>
+				<include name="src\AdamDotCom.Amazon.UnitTests\**\*.cs" />
+			</sources>
+		</csc>
+	</target>
+	
+	<target name="test" description="runs the unit tests" depends="test.compile">
+		<echo message="Executing unit tests..."/>
+		<exec basedir="3rdParty\nunit\bin"
+			
+			workingdir="build"
+			program="nunit-console.exe"
+			commandline="${project::get-name()}.UnitTests.dll /xml=${project::get-name()}.UnitTests-Result.xml" />	
+	</target>
+
+</project>

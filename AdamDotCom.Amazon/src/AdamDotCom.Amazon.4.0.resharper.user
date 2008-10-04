@@ -1,0 +1,132 @@
+<Configuration>
+  <UnitTestRunner>
+    <CustomStartDirectory>
+    </CustomStartDirectory>
+    <UseShadowCopy>True</UseShadowCopy>
+    <UseCustomFolder>False</UseCustomFolder>
+    <EnableUnitTesting>True</EnableUnitTesting>
+    <Providers />
+  </UnitTestRunner>
+  <RecentFiles>
+    <RecentFiles>
+      <File id="8AAA89A1-7D7D-4E43-9BDC-79C23B5DBBDE/f:IAmazonFactory.cs" caret="35" scrollPosition="0|0" />
+      <File id="8AAA89A1-7D7D-4E43-9BDC-79C23B5DBBDE/f:AmazonFactory.cs" caret="35" scrollPosition="0|0" />
+      <File id="8AAA89A1-7D7D-4E43-9BDC-79C23B5DBBDE/f:AmazonAssetHelper.cs" caret="582" scrollPosition="0|0" />
+      <File id="8AAA89A1-7D7D-4E43-9BDC-79C23B5DBBDE/f:ReviewListMapper.cs" caret="2359" scrollPosition="0|51" />
+      <File id="0BED96A7-D92F-49C2-BD30-97D301E3316D/f:FileParameters.cs" caret="0" scrollPosition="0|0" />
+      <File id="0BED96A7-D92F-49C2-BD30-97D301E3316D/f:IAmazonApplication.cs" caret="0" scrollPosition="0|0" />
+      <File id="0BED96A7-D92F-49C2-BD30-97D301E3316D/f:IFileParameters.cs" caret="0" scrollPosition="0|0" />
+      <File id="398226F6-12AD-4C11-BD92-937944A36494/f:ReviewMapperTest.cs" caret="283" scrollPosition="0|0" />
+      <File id="398226F6-12AD-4C11-BD92-937944A36494/f:ReviewListMapperTest.cs" caret="955" scrollPosition="0|2" />
+      <File id="398226F6-12AD-4C11-BD92-937944A36494/f:ProductMapperTest.cs" caret="283" scrollPosition="0|4" />
+      <File id="398226F6-12AD-4C11-BD92-937944A36494/f:ProductListMapperTest.cs" caret="273" scrollPosition="0|0" />
+      <File id="398226F6-12AD-4C11-BD92-937944A36494/f:ListMapperTest.cs" caret="709" scrollPosition="0|0" />
+      <File id="398226F6-12AD-4C11-BD92-937944A36494/f:FormatHelperTest.cs" caret="0" scrollPosition="0|0" />
+      <File id="8AAA89A1-7D7D-4E43-9BDC-79C23B5DBBDE/f:FormatHelper.cs" caret="1797" scrollPosition="0|50" />
+      <File id="398226F6-12AD-4C11-BD92-937944A36494/f:AmazonFactoryTest.cs" caret="0" scrollPosition="0|30" />
+      <File id="8AAA89A1-7D7D-4E43-9BDC-79C23B5DBBDE/f:AmazonRequest.cs" caret="989" scrollPosition="0|0" />
+      <File id="0BED96A7-D92F-49C2-BD30-97D301E3316D/f:AmazonApplication.cs" caret="0" scrollPosition="0|0" />
+      <File id="398226F6-12AD-4C11-BD92-937944A36494/f:AmazonApplicationTest.cs" caret="196" scrollPosition="0|0" />
+      <File id="65D0478A-895F-48BB-A36E-C4AD1E28132E/f:IListItemDTO.cs" caret="0" scrollPosition="0|0" />
+      <File id="65D0478A-895F-48BB-A36E-C4AD1E28132E/f:IListMapper.cs" caret="37" scrollPosition="0|0" />
+      <File id="65D0478A-895F-48BB-A36E-C4AD1E28132E/f:IProductDTO.cs" caret="0" scrollPosition="0|0" />
+      <File id="65D0478A-895F-48BB-A36E-C4AD1E28132E/f:IProductMapper.cs" caret="37" scrollPosition="0|3" />
+      <File id="65D0478A-895F-48BB-A36E-C4AD1E28132E/f:IReviewDTO.cs" caret="17" scrollPosition="0|0" />
+      <File id="65D0478A-895F-48BB-A36E-C4AD1E28132E/f:IReviewMapper.cs" caret="37" scrollPosition="0|0" />
+      <File id="65D0478A-895F-48BB-A36E-C4AD1E28132E/f:ListItemDTO.cs" caret="49" scrollPosition="0|0" />
+      <File id="65D0478A-895F-48BB-A36E-C4AD1E28132E/f:ListMapper.cs" caret="169" scrollPosition="0|0" />
+      <File id="65D0478A-895F-48BB-A36E-C4AD1E28132E/f:ProductDTO.cs" caret="49" scrollPosition="0|0" />
+      <File id="65D0478A-895F-48BB-A36E-C4AD1E28132E/f:ReviewDTO.cs" caret="64" scrollPosition="0|0" />
+      <File id="65D0478A-895F-48BB-A36E-C4AD1E28132E/f:ReviewMapper.cs" caret="50" scrollPosition="0|0" />
+      <File id="65D0478A-895F-48BB-A36E-C4AD1E28132E/f:ProductMapper.cs" caret="289" scrollPosition="0|0" />
+    </RecentFiles>
+    <RecentEdits>
+      <File id="398226F6-12AD-4C11-BD92-937944A36494/f:ReviewListMapperTest.cs" caret="1240" scrollPosition="0|0" />
+      <File id="398226F6-12AD-4C11-BD92-937944A36494/f:ReviewListMapperTest.cs" caret="1500" scrollPosition="0|0" />
+      <File id="398226F6-12AD-4C11-BD92-937944A36494/f:ReviewListMapperTest.cs" caret="1822" scrollPosition="0|11" />
+      <File id="398226F6-12AD-4C11-BD92-937944A36494/f:ReviewListMapperTest.cs" caret="621" scrollPosition="0|2" />
+      <File id="398226F6-12AD-4C11-BD92-937944A36494/f:ReviewListMapperTest.cs" caret="917" scrollPosition="0|2" />
+      <File id="398226F6-12AD-4C11-BD92-937944A36494/f:ReviewMapperTest.cs" caret="575" scrollPosition="0|0" />
+      <File id="398226F6-12AD-4C11-BD92-937944A36494/f:ReviewMapperTest.cs" caret="267" scrollPosition="0|0" />
+      <File id="398226F6-12AD-4C11-BD92-937944A36494/f:ProductListMapperTest.cs" caret="273" scrollPosition="0|0" />
+      <File id="65D0478A-895F-48BB-A36E-C4AD1E28132E/f:ListMapper.cs" caret="169" scrollPosition="0|0" />
+      <File id="8AAA89A1-7D7D-4E43-9BDC-79C23B5DBBDE/f:FormatHelper.cs" caret="1797" scrollPosition="0|50" />
+      <File id="65D0478A-895F-48BB-A36E-C4AD1E28132E/f:ProductMapper.cs" caret="169" scrollPosition="0|0" />
+      <File id="65D0478A-895F-48BB-A36E-C4AD1E28132E/f:ProductMapper.cs" caret="169" scrollPosition="0|0" />
+      <File id="65D0478A-895F-48BB-A36E-C4AD1E28132E/f:ReviewMapper.cs" caret="169" scrollPosition="0|0" />
+      <File id="65D0478A-895F-48BB-A36E-C4AD1E28132E/f:ListMapper.cs" caret="169" scrollPosition="0|0" />
+      <File id="398226F6-12AD-4C11-BD92-937944A36494/f:AmazonApplicationTest.cs" caret="719" scrollPosition="0|9" />
+      <File id="398226F6-12AD-4C11-BD92-937944A36494/f:AmazonApplicationTest.cs" caret="137" scrollPosition="0|0" />
+      <File id="0BED96A7-D92F-49C2-BD30-97D301E3316D/f:AmazonApplication.cs" caret="0" scrollPosition="0|0" />
+      <File id="398226F6-12AD-4C11-BD92-937944A36494/f:AmazonApplicationTest.cs" caret="195" scrollPosition="0|0" />
+      <File id="65D0478A-895F-48BB-A36E-C4AD1E28132E/f:IListItemDTO.cs" caret="0" scrollPosition="0|0" />
+      <File id="65D0478A-895F-48BB-A36E-C4AD1E28132E/f:IListMapper.cs" caret="37" scrollPosition="0|0" />
+      <File id="65D0478A-895F-48BB-A36E-C4AD1E28132E/f:IProductDTO.cs" caret="0" scrollPosition="0|0" />
+      <File id="65D0478A-895F-48BB-A36E-C4AD1E28132E/f:IProductMapper.cs" caret="37" scrollPosition="0|0" />
+      <File id="65D0478A-895F-48BB-A36E-C4AD1E28132E/f:IReviewDTO.cs" caret="17" scrollPosition="0|0" />
+      <File id="65D0478A-895F-48BB-A36E-C4AD1E28132E/f:IReviewMapper.cs" caret="37" scrollPosition="0|0" />
+      <File id="65D0478A-895F-48BB-A36E-C4AD1E28132E/f:ListItemDTO.cs" caret="49" scrollPosition="0|0" />
+      <File id="65D0478A-895F-48BB-A36E-C4AD1E28132E/f:ListMapper.cs" caret="169" scrollPosition="0|0" />
+      <File id="65D0478A-895F-48BB-A36E-C4AD1E28132E/f:ProductDTO.cs" caret="49" scrollPosition="0|0" />
+      <File id="65D0478A-895F-48BB-A36E-C4AD1E28132E/f:ReviewDTO.cs" caret="64" scrollPosition="0|0" />
+      <File id="65D0478A-895F-48BB-A36E-C4AD1E28132E/f:ReviewMapper.cs" caret="169" scrollPosition="0|0" />
+      <File id="65D0478A-895F-48BB-A36E-C4AD1E28132E/f:ProductMapper.cs" caret="97" scrollPosition="0|0" />
+    </RecentEdits>
+  </RecentFiles>
+  <SettingsComponent>
+    <string />
+    <integer />
+    <boolean>
+      <setting name="SolutionAnalysisEnabled">False</setting>
+      <setting name="UseSolutionBuilder">False</setting>
+    </boolean>
+  </SettingsComponent>
+  <NAntValidationSettings>
+    <NAntPath value="" />
+  </NAntValidationSettings>
+  <CompletionStatisticsManager>
+    <ItemStatistics item="Default">
+      <Item value="Empty" priority="4" />
+      <Item value="ToString" priority="3" />
+      <Item value="SerializationHelper" priority="0" />
+      <Item value="ToXml" priority="0" />
+      <Item value="Review" priority="0" />
+      <Item value="ASIN" priority="0" />
+      <Item value="AreNotEqual" priority="1" />
+      <Item value="StreamWriter" priority="0" />
+      <Item value="WriteLine" priority="1" />
+      <Item value="TextWriter" priority="0" />
+      <Item value="List&lt;Review&gt;" priority="0" />
+      <Item value="Add" priority="0" />
+      <Item value="amazonRequest" priority="1" />
+      <Item value="CustomerIdOfReviewer" priority="0" />
+      <Item value="amazonFactory" priority="2" />
+      <Item value="AmazonFactory" priority="0" />
+      <Item value="GetResponse" priority="0" />
+      <Item value="amazonRespone" priority="0" />
+      <Item value="amazonResponse" priority="1" />
+      <Item value="Products" priority="1" />
+      <Item value="Reviews" priority="0" />
+      <Item value="Errors" priority="1" />
+      <Item value="Count" priority="0" />
+      <Item value="fileParameters" priority="3" />
+      <Item value="ListId" priority="0" />
+      <Item value="FileParameters" priority="0" />
+      <Item value="ProductListFileName" priority="0" />
+      <Item value="ReviewListFileName" priority="0" />
+      <Item value="IFileParameters" priority="0" />
+      <Item value="ProductFileNameAndPath" priority="0" />
+      <Item value="ReviewFileNameAndPath" priority="0" />
+      <Item value="ErrorFileNameAndPath" priority="0" />
+      <Item value="AmazonXmlFactory" priority="1" />
+      <Item value="amazonXmlFactory" priority="0" />
+      <Item value="Save" priority="0" />
+      <Item value="AreEqual" priority="0" />
+      <Item value="Items" priority="0" />
+      <Item value="Item" priority="0" />
+      <Item value="AmazonRequest" priority="1" />
+      <Item value="Sleep" priority="1" />
+      <Item value="Dispose" priority="0" />
+    </ItemStatistics>
+  </CompletionStatisticsManager>
+</Configuration>
