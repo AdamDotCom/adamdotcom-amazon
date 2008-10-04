@@ -16,10 +16,10 @@
 	<target name="compile" description="compiles the library DLLs used by the application" depends="init">
 		<csc target="library" output="build\AdamDotCom.Amazon.dll" debug="false" warninglevel="0" >
 			<sources>
-				<include name="src\AdamDotCom.Amazon.Application\**\*.cs"/>
-				<include name="src\AdamDotCom.Amazon.WebServiceTranslator\**\*.cs"/>
-				<include name="src\AdamDotCom.Amazon.Domain\**\*.cs"/>
-				<include name="src\AdamDotCom.Amazon.DTO\**\*.cs"/>
+				<include name="source\AdamDotCom.Amazon.Application\**\*.cs"/>
+				<include name="source\AdamDotCom.Amazon.WebServiceTranslator\**\*.cs"/>
+				<include name="source\AdamDotCom.Amazon.Domain\**\*.cs"/>
+				<include name="source\AdamDotCom.Amazon.DTO\**\*.cs"/>
 			</sources>
 		</csc>
 	</target>
@@ -38,7 +38,7 @@
 				<include name="build\*.dll" />
 			</references>
 			<sources>
-				<include name="src\AdamDotCom.Amazon.UnitTests\**\*.cs" />
+				<include name="source\AdamDotCom.Amazon.UnitTests\**\*.cs" />
 			</sources>
 		</csc>
 	</target>
