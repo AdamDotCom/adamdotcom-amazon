@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Xml.Serialization;
 
 namespace AdamDotCom.Amazon.Domain
 {
-    [XmlRoot("Review")]
     public class Review : IReview
     {
         public string Summary  { get; set; }
