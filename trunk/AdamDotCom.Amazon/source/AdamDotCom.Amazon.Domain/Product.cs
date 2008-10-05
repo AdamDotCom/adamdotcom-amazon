@@ -1,9 +1,5 @@
-﻿using System;
-using System.Xml.Serialization;
-
-namespace AdamDotCom.Amazon.Domain
+﻿namespace AdamDotCom.Amazon.Domain
 {
-    [XmlRoot("Product")]
     public class Product : IProduct
     {
         public string ASIN { get; set; }
