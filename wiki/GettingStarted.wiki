@@ -1,0 +1,41 @@
+#summary Getting Started With A Code Example
+
+= Introduction =
+
+To use this module for your own Amazon reviews and product lists you will need to sign-up for the following:
+  * An Amazon Web Service (AWS) access key. http://aws.amazon.com/
+  * An Amazon Associates tag. https://affiliate-program.amazon.com/gp/associates/join
+
+Then you will need to write a review or create a wishlist, and then find the following:
+  * The listid you want to retrieve a list from.
+  _Don't know where to find this? I found my ListId by navigating to my wishlist: http://www.amazon.com/gp/registry/registry.html/?id=3JU6ASKNUS7B8 then pulling out 3JU6ASKNUS7B8 (the identifier afer id= from the url)._
+  * The CustomerId you want to retrieve reviews from. 
+  _Don't know where to find this? I found my CustomerId by navigating to my reviews: http://www.amazon.com/gp/cdp/member-reviews/A2JM0EQJELFL69/ then pulling out A2JM0EQJELFL69 (the last element of the url)._
+
+= Example =
+
+{{{
+
+//Hydrate the request object with your Amazon details
+IAmazonRequest amazonRequest = new AmazonRequest();
+amazonRequest.AssociateTag = "adamkahtavaap-20";
+amazonRequest.AWSAccessKeyId = "1MRFMGASE6CQKS2WTMR2";
+amazonRequest.CustomerId = "A2JM0EQJELFL69";
+amazonRequest.ListId = "3JU6ASKNUS7B8";
+
+//Hydrate your file parameter object with your file details (where you want the files saved to)
+IFileParameters fileParameters = new FileParameters();
+
+string folderPath = Path.Combine(HttpContext.Current.Request.PhysicalApplicationPath, "Xml");
+fileParameters.ProductFileNameAndPath = folderPath + @"\Products.xml";
+fileParameters.ReviewFileNameAndPath = folderPath + @"\Reviews.xml";
+fileParameters.ErrorFileNameAndPath = folderPath + @"\Errors.xml";
+
+IAmazonApplication amazonApplication = new AmazonApplication(amazonRequest, fileParameters);
+
+//
+amazonApplication.Save();
+
+}}}
+
+  Once the code is persisted to your local environment you can consume it. I've loaded mine into a couple repeaters which can be viewed here: http://adam.kahtava.com/codesamples/adamdotcom.amazon/samplewebapp/default.aspx
