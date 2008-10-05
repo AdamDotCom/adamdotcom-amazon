@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using AdamDotCom.Amazon.Domain;
+using AdamDotCom.Amazon.Application;
 using NUnit.Framework;
 
 namespace AdamDotCom.Amazon.UnitTests
@@ -20,7 +20,7 @@ namespace AdamDotCom.Amazon.UnitTests
         }
 
         [Test]
-        public void ShouldInvolkAndReturnProductsAndReviews()
+        public void ShouldInvokeAndReturnSuccessfulProductsAndReviews()
         {
             amazonRequest.AssociateTag = "adamkahtavaap-20";
             amazonRequest.AWSAccessKeyId = "1MRFMGASE6CQKS2WTMR2";
@@ -44,7 +44,7 @@ namespace AdamDotCom.Amazon.UnitTests
         }
 
         [Test]
-        public void ShouldInvolkAndReturnErrorsFromIncorrectCustomerIdAndListId()
+        public void ShouldInvokeAndReturnErrorsFromIncorrectCustomerIdAndListId()
         {
             IAmazonRequest amazonRequestLocal = amazonRequest;
 
@@ -63,7 +63,7 @@ namespace AdamDotCom.Amazon.UnitTests
         }
 
         [Test]
-        public void ShouldInvolkAndReturnErrorsFromIncorrectAWSAccessKeyId()
+        public void ShouldInvokeAndReturnErrorsFromIncorrectAWSAccessKeyId()
         {
             IAmazonRequest amazonRequestLocal = amazonRequest;
             amazonRequest.AWSAccessKeyId = "trash";

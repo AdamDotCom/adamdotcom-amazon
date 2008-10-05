@@ -1,5 +1,4 @@
 ﻿using AdamDotCom.Amazon.Application;
-using AdamDotCom.Amazon.Domain;
 using NUnit.Framework;
 
 namespace AdamDotCom.Amazon.UnitTests
@@ -21,9 +20,9 @@ namespace AdamDotCom.Amazon.UnitTests
             fileParameters.ReviewFileNameAndPath = @"../../../../Reviews.xml";
             fileParameters.ErrorFileNameAndPath = @"../../../../Errors.xml";
 
-            IAmazonApplication amazonXmlFactory = new AmazonApplication(amazonRequest, fileParameters);
+            IAmazonApplication amazonApplication = new AmazonApplication(amazonRequest, fileParameters);
             
-            Assert.AreEqual(true, amazonXmlFactory.Save());
+            Assert.AreEqual(true, amazonApplication.Save());
         }
     }
 }
