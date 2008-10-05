@@ -77,5 +77,29 @@ namespace AdamDotCom.Amazon.UnitTests
                 Debug.WriteLine(error);
             }
         }
+
+        [Test]
+        public void ShouldReturnErrorsBecauseListIdAndCustomerIdHaveNotBeenSpecified()
+        {
+            IAmazonRequest amazonRequestLocal = new AmazonRequest();
+            amazonRequestLocal.AssociateTag = "adamkahtavaap-20";
+            amazonRequestLocal.AWSAccessKeyId = "1MRFMGASE6CQKS2WTMR2";
+            amazonRequestLocal.CustomerId = string.Empty;
+            amazonRequestLocal.ListId = string.Empty;
+
+            IAmazonResponse amazonResponse = new AmazonFactory(amazonRequestLocal).GetResponse();
+
+            Assert.Greater(amazonResponse.Errors.Count, 0);
+
+            foreach (string error in amazonResponse.Errors)
+            {
+                if(error.Contains("CustomerId"))
+                {
+                    Assert.IsTrue(true);
+                }
+                Debug.WriteLine(error);
+            }
+        }
+
     }
 }
