@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using AdamDotCom.Amazon.Application;
+using AdamDotCom.Amazon.Domain;
 using NUnit.Framework;
 
 namespace AdamDotCom.Amazon.UnitTests

@@ -1,4 +1,5 @@
 ﻿using AdamDotCom.Amazon.Application;
+using AdamDotCom.Amazon.Domain;
 using NUnit.Framework;
 
 namespace AdamDotCom.Amazon.UnitTests
@@ -16,9 +17,9 @@ namespace AdamDotCom.Amazon.UnitTests
             amazonRequest.ListId = "3JU6ASKNUS7B8";
 
             IFileParameters fileParameters = new FileParameters();
-            fileParameters.ProductFileNameAndPath = @"../../../../Products.xml";
-            fileParameters.ReviewFileNameAndPath = @"../../../../Reviews.xml";
-            fileParameters.ErrorFileNameAndPath = @"../../../../Errors.xml";
+            fileParameters.ProductFileNameAndPath = @"Products.xml";
+            fileParameters.ReviewFileNameAndPath = @"Reviews.xml";
+            fileParameters.ErrorFileNameAndPath = @"Errors.xml";
 
             IAmazonApplication amazonApplication = new AmazonApplication(amazonRequest, fileParameters);
             

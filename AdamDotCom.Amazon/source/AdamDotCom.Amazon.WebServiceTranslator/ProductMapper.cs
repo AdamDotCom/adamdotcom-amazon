@@ -21,12 +21,12 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
             errors = new List<string>();
         }
 
-        public List<string> GetErrors()
+        public virtual List<string> GetErrors()
         {
             return errors;
         }
 
-        public List<ProductDTO> GetProducts(List<string> asinList)
+        public virtual List<ProductDTO> GetProducts(List<string> asinList)
         {
             List<ProductDTO> productsToReturn = new List<ProductDTO>();
 
