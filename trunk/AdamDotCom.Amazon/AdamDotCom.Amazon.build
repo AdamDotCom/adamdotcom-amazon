@@ -6,20 +6,20 @@
 	<target name="all" depends="compile test"/>
 	
 	<target name="init" description="performs the initializations for a build" depends="clean">
-		<mkdir dir="build"/>
+		<mkdir dir="Build"/>
 	</target>
 	
 	<target name="clean" description="removes all generated build products">
-		<delete dir="build" if="${directory::exists('build')}" />
+		<delete dir="Build" if="${directory::exists('build')}" />
 	</target>
 	
 	<target name="compile" description="compiles the library DLLs used by the application" depends="init">
-		<csc target="library" output="build\AdamDotCom.Amazon.dll" debug="false" warninglevel="0" >
+		<csc target="library" output="Build\AdamDotCom.Amazon.dll" debug="false" warninglevel="0" >
 			<sources>
-				<include name="source\AdamDotCom.Amazon.Application\**\*.cs"/>
-				<include name="source\AdamDotCom.Amazon.WebServiceTranslator\**\*.cs"/>
-				<include name="source\AdamDotCom.Amazon.Domain\**\*.cs"/>
-				<include name="source\AdamDotCom.Amazon.DTO\**\*.cs"/>
+				<include name="Source\AdamDotCom.Amazon.Application\**\*.cs"/>
+				<include name="Source\AdamDotCom.Amazon.WebServiceTranslator\**\*.cs"/>
+				<include name="Source\AdamDotCom.Amazon.Domain\**\*.cs"/>
+				<include name="Source\AdamDotCom.Amazon.DTO\**\*.cs"/>
 			</sources>
 		</csc>
 	</target>
@@ -38,7 +38,7 @@
 				<include name="build\*.dll" />
 			</references>
 			<sources>
-				<include name="source\AdamDotCom.Amazon.UnitTests\**\*.cs" />
+				<include name="Source\AdamDotCom.Amazon.UnitTests\**\*.cs" />
 			</sources>
 		</csc>
 	</target>
