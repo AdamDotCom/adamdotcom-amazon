@@ -2,6 +2,7 @@
 using System.IO;
 using System.Xml.Serialization;
 using AdamDotCom.Amazon.Domain;
+using AdamDotCom.Amazon.Domain.Interfaces;
 
 namespace AdamDotCom.Amazon.Application
 {

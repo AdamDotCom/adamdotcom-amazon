@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using AdamDotCom.Amazon.Domain.Extensions;
+using AdamDotCom.Amazon.Domain.Interfaces;
 using AdamDotCom.Amazon.WebServiceTranslator;
 
 namespace AdamDotCom.Amazon.Domain
@@ -49,10 +51,10 @@ namespace AdamDotCom.Amazon.Domain
             Product productToReturn = new Product();
 
             productToReturn.ASIN = product.ASIN;
-            productToReturn.Authors = FormatHelper.MapAuthors(product.Authors);
-            productToReturn.AuthorsMLA = FormatHelper.MapAuthorsInMlaFormat(product.Authors);
-            productToReturn.ImageUrl = AmazonAssetHelper.ProductImageUrl(amazonRequest.AssociateTag, product.ASIN);
-            productToReturn.ProductPreviewUrl = AmazonAssetHelper.ProductPreviewUrl(amazonRequest.AssociateTag, product.ASIN);
+            productToReturn.Authors = product.MapAuthors();
+            productToReturn.AuthorsMLA = product.MapAuthorsInMlaFormat();
+            productToReturn.ImageUrl = product.ProductImageUrl(amazonRequest.AssociateTag);
+            productToReturn.ProductPreviewUrl = product.ProductPreviewUrl(amazonRequest.AssociateTag);
             productToReturn.Publisher = product.Publisher;
             productToReturn.Title = product.Title;
             productToReturn.Url = product.Url;

@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using AdamDotCom.Amazon.Domain.Extensions;
+using AdamDotCom.Amazon.Domain.Interfaces;
 using AdamDotCom.Amazon.WebServiceTranslator;
 
 namespace AdamDotCom.Amazon.Domain
@@ -58,13 +60,13 @@ namespace AdamDotCom.Amazon.Domain
             Review reviewToReturn = new Review();
 
             reviewToReturn.ASIN = product.ASIN;
-            reviewToReturn.Authors = FormatHelper.MapAuthors(product.Authors);
-            reviewToReturn.AuthorsMLA = FormatHelper.MapAuthorsInMlaFormat(product.Authors);
+            reviewToReturn.Authors = product.MapAuthors();
+            reviewToReturn.AuthorsMLA = product.MapAuthorsInMlaFormat();
             reviewToReturn.Content = review.Content;
             reviewToReturn.Date = review.Date;
             reviewToReturn.HelpfulVotes = review.HelpfulVotes;
-            reviewToReturn.ImageUrl = AmazonAssetHelper.ProductImageUrl(amazonRequest.AssociateTag, product.ASIN);
-            reviewToReturn.ProductPreviewUrl = AmazonAssetHelper.ProductPreviewUrl(amazonRequest.AssociateTag, product.ASIN);
+            reviewToReturn.ImageUrl = product.ProductImageUrl(amazonRequest.AssociateTag);
+            reviewToReturn.ProductPreviewUrl = product.ProductPreviewUrl(amazonRequest.AssociateTag);
             reviewToReturn.Publisher = product.Publisher;
             reviewToReturn.Rating = review.Rating;
             reviewToReturn.Summary = review.Summary;
