@@ -47,18 +47,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AmazonAssetHelper.cs" />
     <Compile Include="AmazonFactory.cs" />
     <Compile Include="AmazonRequest.cs" />
     <Compile Include="AmazonResponse.cs" />
-    <Compile Include="FormatHelper.cs" />
-    <Compile Include="IAmazonFactory.cs" />
-    <Compile Include="IAmazonRequest.cs" />
-    <Compile Include="IAmazonResponse.cs" />
-    <Compile Include="IProduct.cs" />
-    <Compile Include="IProductListMapper.cs" />
-    <Compile Include="IReview.cs" />
-    <Compile Include="IReviewListMapper.cs" />
+    <Compile Include="Extensions\AmazonAssetHelper.cs" />
+    <Compile Include="Extensions\FormatHelper.cs" />
+    <Compile Include="Interfaces\IAmazonFactory.cs" />
+    <Compile Include="Interfaces\IAmazonRequest.cs" />
+    <Compile Include="Interfaces\IAmazonResponse.cs" />
+    <Compile Include="Interfaces\IProduct.cs" />
+    <Compile Include="Interfaces\IProductListMapper.cs" />
+    <Compile Include="Interfaces\IReview.cs" />
+    <Compile Include="Interfaces\IReviewListMapper.cs" />
     <Compile Include="Product.cs" />
     <Compile Include="ProductListMapper.cs" />
     <Compile Include="Review.cs" />

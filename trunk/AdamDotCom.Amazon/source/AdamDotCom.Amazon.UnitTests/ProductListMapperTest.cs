@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using AdamDotCom.Amazon.Application;
 using AdamDotCom.Amazon.Domain;
+using AdamDotCom.Amazon.Domain.Interfaces;
 using NUnit.Framework;
 
 namespace AdamDotCom.Amazon.UnitTests

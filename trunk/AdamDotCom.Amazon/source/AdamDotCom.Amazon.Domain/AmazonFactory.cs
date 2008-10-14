@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using AdamDotCom.Amazon.Domain;
+using AdamDotCom.Amazon.Domain.Interfaces;
 
 namespace AdamDotCom.Amazon.Domain
 {

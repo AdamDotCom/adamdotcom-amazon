@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace AdamDotCom.Amazon.Domain
+namespace AdamDotCom.Amazon.Domain.Interfaces
 {
     public interface IAmazonResponse
     {

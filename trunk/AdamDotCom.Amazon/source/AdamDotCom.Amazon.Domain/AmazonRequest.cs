@@ -1,4 +1,6 @@
-﻿namespace AdamDotCom.Amazon.Domain
+﻿using AdamDotCom.Amazon.Domain.Interfaces;
+
+namespace AdamDotCom.Amazon.Domain
 {
     public class AmazonRequest : IAmazonRequest
     {

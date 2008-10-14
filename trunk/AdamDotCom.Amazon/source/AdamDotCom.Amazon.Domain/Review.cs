@@ -1,4 +1,5 @@
 ﻿using System;
+using AdamDotCom.Amazon.Domain.Interfaces;
 
 namespace AdamDotCom.Amazon.Domain
 {

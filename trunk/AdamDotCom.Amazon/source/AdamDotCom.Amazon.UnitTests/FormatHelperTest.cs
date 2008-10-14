@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
-using AdamDotCom.Amazon.Domain;
+using AdamDotCom.Amazon.Domain.Extensions;
+using AdamDotCom.Amazon.WebServiceTranslator;
 using NUnit.Framework;
 
 namespace AdamDotCom.Amazon.UnitTests
@@ -34,20 +35,20 @@ namespace AdamDotCom.Amazon.UnitTests
         {
             string[] authors = {"Martin Fowler", "Kent Beck", "John Brant", "William Opdyke", "Don Roberts"};
 
-            string authorsInMLA = FormatHelper.MapAuthorsInMlaFormat(authors);
+            string authorsInMLA = new ProductDTO {Authors = authors}.MapAuthorsInMlaFormat();
 
             Assert.IsFalse(string.IsNullOrEmpty(authorsInMLA));
             Assert.AreEqual("Fowler Martin, et al.", authorsInMLA);
             Debug.WriteLine(authorsInMLA);
 
             string[] edgeCaseAuthors = { "Daniel P. Friedman", "William E. Byrd", "Oleg Kiselyov" };
-            authorsInMLA = FormatHelper.MapAuthorsInMlaFormat(edgeCaseAuthors);
+            authorsInMLA = new ProductDTO {Authors = edgeCaseAuthors}.MapAuthorsInMlaFormat();
 
             Assert.AreEqual("Friedman P. Daniel, Byrd E. William, and Kiselyov Oleg.", authorsInMLA);
             Debug.WriteLine(authorsInMLA);
 
             string[] fewAuthors = { "Daniel P. Friedman", "William E. Byrd" };
-            authorsInMLA = FormatHelper.MapAuthorsInMlaFormat(fewAuthors);
+            authorsInMLA = new ProductDTO {Authors = fewAuthors}.MapAuthorsInMlaFormat();
 
             Assert.AreEqual("Friedman P. Daniel, and Byrd E. William.", authorsInMLA);
             Debug.WriteLine(authorsInMLA);
@@ -58,7 +59,7 @@ namespace AdamDotCom.Amazon.UnitTests
         {
             string[] authors = { "Martin Fowler", "Kent Beck", "John Brant", "William Opdyke", "Don Roberts" };
 
-            string authorsFlattened = FormatHelper.MapAuthors(authors);
+            string authorsFlattened = new ProductDTO() {Authors = authors}.MapAuthors();
 
             Assert.IsFalse(string.IsNullOrEmpty(authorsFlattened));
             Assert.AreEqual("Martin Fowler, Kent Beck, John Brant, William Opdyke, Don Roberts", authorsFlattened);

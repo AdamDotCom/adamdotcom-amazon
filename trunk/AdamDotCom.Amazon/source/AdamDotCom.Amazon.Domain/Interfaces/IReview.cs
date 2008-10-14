@@ -1,6 +1,7 @@
 ﻿using System;
+using AdamDotCom.Amazon.Domain.Interfaces;
 
-namespace AdamDotCom.Amazon.Domain
+namespace AdamDotCom.Amazon.Domain.Interfaces
 {
     public interface IReview : IProduct
     {
