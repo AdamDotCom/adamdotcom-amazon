@@ -32,8 +32,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="FileParameters.cs" />
-    <Compile Include="IAmazonApplication.cs" />
-    <Compile Include="IFileParameters.cs" />
+    <Compile Include="Interfaces\IAmazonApplication.cs" />
+    <Compile Include="Interfaces\IFileParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AmazonApplication.cs" />
   </ItemGroup>

@@ -1,11 +1,11 @@
 ﻿using System.Text;
-using AdamDotCom.Amazon.WebServiceTranslator;
+using AdamDotCom.Amazon.WebServiceTranslator.Interfaces;
 
 namespace AdamDotCom.Amazon.Domain.Extensions
 {
     public static class FormatHelper
     {
-        public static string MapAuthors(this IProductDTO product)
+        public static string Authors(this IProductDTO product)
         {
             string[] authors = product.Authors;
             if(authors == null)
@@ -25,7 +25,7 @@ namespace AdamDotCom.Amazon.Domain.Extensions
             return authorsToReturn.Remove(authorsToReturn.Length - delimiter.Length, delimiter.Length).ToString();
         }
 
-        public static string MapAuthorsInMlaFormat(this IProductDTO product)
+        public static string AuthorsInMlaFormat(this IProductDTO product)
         {
             string[] authors = product.Authors;
             if (authors == null)

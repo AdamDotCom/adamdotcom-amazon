@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AdamDotCom.Amazon.WebServiceTranslator
+namespace AdamDotCom.Amazon.WebServiceTranslator.Interfaces
 {
     public interface IReviewDTO
     {

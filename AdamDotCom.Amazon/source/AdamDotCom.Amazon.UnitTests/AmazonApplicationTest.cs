@@ -1,4 +1,5 @@
 ﻿using AdamDotCom.Amazon.Application;
+using AdamDotCom.Amazon.Application.Interfaces;
 using AdamDotCom.Amazon.Domain;
 using AdamDotCom.Amazon.Domain.Interfaces;
 using NUnit.Framework;

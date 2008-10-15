@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using AdamDotCom.Amazon.WebServiceTranslator.com.amazon.webservices;
 using AdamDotCom.Amazon.WebServiceTranslator;
+using AdamDotCom.Amazon.WebServiceTranslator.Interfaces;
 
 namespace AdamDotCom.Amazon.WebServiceTranslator
 {
@@ -84,16 +85,16 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
 
         private ReviewDTO MapReview(Review review)
         {
-            ReviewDTO reviewToReturn = new ReviewDTO();
-
-            reviewToReturn.ASIN = review.ASIN;
-            reviewToReturn.Rating = review.Rating;
-            reviewToReturn.Summary = review.Summary;
-            reviewToReturn.Content = review.Content;
-            reviewToReturn.Date = Convert.ToDateTime(review.Date);
-            reviewToReturn.HelpfulVotes = Convert.ToInt32(review.HelpfulVotes);
-            reviewToReturn.TotalVotes = Convert.ToInt32(review.TotalVotes);
-            reviewToReturn.Content = review.Content;
+            ReviewDTO reviewToReturn = new ReviewDTO()
+            {
+                ASIN = review.ASIN,
+                Rating = review.Rating,
+                Summary = review.Summary,
+                Content = review.Content,
+                Date = Convert.ToDateTime(review.Date),
+                HelpfulVotes = Convert.ToInt32(review.HelpfulVotes),
+                TotalVotes = Convert.ToInt32(review.TotalVotes),
+            };
 
             return reviewToReturn;
         }

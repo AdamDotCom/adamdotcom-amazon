@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using AdamDotCom.Amazon.WebServiceTranslator.com.amazon.webservices;
 using AdamDotCom.Amazon.WebServiceTranslator;
+using AdamDotCom.Amazon.WebServiceTranslator.Interfaces;
 
 namespace AdamDotCom.Amazon.WebServiceTranslator
 {
@@ -83,9 +84,10 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
 
         private IListItemDTO MapListItem(Item listItem)
         {
-            IListItemDTO listItemToReturn = new ListItemDTO();
-
-            listItemToReturn.ASIN = listItem.ASIN;
+            IListItemDTO listItemToReturn = new ListItemDTO()
+            {
+                ASIN = listItem.ASIN 
+            };
 
             return listItemToReturn;
         }

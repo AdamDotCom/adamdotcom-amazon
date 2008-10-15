@@ -39,12 +39,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IListItemDTO.cs" />
-    <Compile Include="IProductDTO.cs" />
-    <Compile Include="IProductMapper.cs" />
-    <Compile Include="IReviewDTO.cs" />
-    <Compile Include="IReviewMapper.cs" />
-    <Compile Include="IListMapper.cs" />
+    <Compile Include="Interfaces\IListItemDTO.cs" />
+    <Compile Include="Interfaces\IListMapper.cs" />
+    <Compile Include="Interfaces\IProductDTO.cs" />
+    <Compile Include="Interfaces\IProductMapper.cs" />
+    <Compile Include="Interfaces\IReviewDTO.cs" />
+    <Compile Include="Interfaces\IReviewMapper.cs" />
     <Compile Include="ListItemDTO.cs" />
     <Compile Include="ProductDTO.cs" />
     <Compile Include="ProductMapper.cs" />

@@ -35,20 +35,20 @@ namespace AdamDotCom.Amazon.UnitTests
         {
             string[] authors = {"Martin Fowler", "Kent Beck", "John Brant", "William Opdyke", "Don Roberts"};
 
-            string authorsInMLA = new ProductDTO {Authors = authors}.MapAuthorsInMlaFormat();
+            string authorsInMLA = new ProductDTO {Authors = authors}.AuthorsInMlaFormat();
 
             Assert.IsFalse(string.IsNullOrEmpty(authorsInMLA));
             Assert.AreEqual("Fowler Martin, et al.", authorsInMLA);
             Debug.WriteLine(authorsInMLA);
 
             string[] edgeCaseAuthors = { "Daniel P. Friedman", "William E. Byrd", "Oleg Kiselyov" };
-            authorsInMLA = new ProductDTO {Authors = edgeCaseAuthors}.MapAuthorsInMlaFormat();
+            authorsInMLA = new ProductDTO {Authors = edgeCaseAuthors}.AuthorsInMlaFormat();
 
             Assert.AreEqual("Friedman P. Daniel, Byrd E. William, and Kiselyov Oleg.", authorsInMLA);
             Debug.WriteLine(authorsInMLA);
 
             string[] fewAuthors = { "Daniel P. Friedman", "William E. Byrd" };
-            authorsInMLA = new ProductDTO {Authors = fewAuthors}.MapAuthorsInMlaFormat();
+            authorsInMLA = new ProductDTO {Authors = fewAuthors}.AuthorsInMlaFormat();
 
             Assert.AreEqual("Friedman P. Daniel, and Byrd E. William.", authorsInMLA);
             Debug.WriteLine(authorsInMLA);
@@ -59,7 +59,7 @@ namespace AdamDotCom.Amazon.UnitTests
         {
             string[] authors = { "Martin Fowler", "Kent Beck", "John Brant", "William Opdyke", "Don Roberts" };
 
-            string authorsFlattened = new ProductDTO() {Authors = authors}.MapAuthors();
+            string authorsFlattened = new ProductDTO() {Authors = authors}.Authors();
 
             Assert.IsFalse(string.IsNullOrEmpty(authorsFlattened));
             Assert.AreEqual("Martin Fowler, Kent Beck, John Brant, William Opdyke, Don Roberts", authorsFlattened);
