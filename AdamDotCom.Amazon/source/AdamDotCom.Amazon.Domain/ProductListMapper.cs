@@ -35,7 +35,7 @@ namespace AdamDotCom.Amazon.Domain
 
             using (productMapper)
             {
-                products = productMapper.GetProducts(listItems.ConvertAll(listItem => listItem.ASIN ));
+                products = productMapper.GetProducts(listItems.ConvertAll(listItem => listItem.ASIN));
 
                 foreach (string error in productMapper.GetErrors())
                 {

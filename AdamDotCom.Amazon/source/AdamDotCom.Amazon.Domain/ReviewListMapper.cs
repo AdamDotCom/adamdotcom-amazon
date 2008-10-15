@@ -1,10 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using AdamDotCom.Amazon.Domain.Extensions;
 using AdamDotCom.Amazon.Domain.Interfaces;
 using AdamDotCom.Amazon.WebServiceTranslator;
-using System.Linq.Expressions;
+using AdamDotCom.Amazon.WebServiceTranslator.Interfaces;
 
 namespace AdamDotCom.Amazon.Domain
 {
@@ -29,8 +28,8 @@ namespace AdamDotCom.Amazon.Domain
             this.amazonRequest = amazonRequest;
             errors = new List<string>();
 
-            ReviewMapper reviewMapper = new ReviewMapper(amazonRequest.AWSAccessKeyId, amazonRequest.AssociateTag,
-                                                         amazonRequest.CustomerId);
+            ReviewMapper reviewMapper = new ReviewMapper(amazonRequest.AWSAccessKeyId, amazonRequest.AssociateTag, amazonRequest.CustomerId);
+
             using (reviewMapper)
             {
                 reviews = reviewMapper.GetReviews();
@@ -65,7 +64,7 @@ namespace AdamDotCom.Amazon.Domain
             return errors;
         }
 
-        private Review MapProductAndReview(ProductDTO product, ReviewDTO review)
+        private Review MapProductAndReview(IProductDTO product, IReviewDTO review)
         {
             Review reviewToReturn = new Review()
             {
@@ -91,11 +90,11 @@ namespace AdamDotCom.Amazon.Domain
 
         private List<Review> MapProductsAndReviews(IList<ProductDTO> products, IList<ReviewDTO> reviews)
         {
-            var results = from product in products
-                        join review in reviews on product.ASIN equals review.ASIN
-                        select MapProductAndReview(product, review);
+            IEnumerable<Review> results = from product in products
+                                          join review in reviews on product.ASIN equals review.ASIN
+                                          select MapProductAndReview(product, review);
 
-            return results.ToList().ConvertAll(ent => ent); 
+            return results.ToList().ConvertAll(review => review);
         }
     }
 }
