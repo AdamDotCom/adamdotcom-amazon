@@ -56,7 +56,7 @@ namespace AdamDotCom.Amazon.Domain
 
         private Product MapProduct(IProductDTO product)
         {
-            var productToReturn = new Product
+            Product productToReturn = new Product
             {
                 ASIN = product.ASIN,
                 Authors = product.Authors(),
