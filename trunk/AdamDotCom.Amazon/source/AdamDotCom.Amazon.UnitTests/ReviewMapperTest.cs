@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using AdamDotCom.Amazon.WebServiceTranslator;
+using AdamDotCom.Amazon.WebServiceTranslator.Interfaces;
 using NUnit.Framework;
 
 namespace AdamDotCom.Amazon.UnitTests

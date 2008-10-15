@@ -31,7 +31,7 @@ namespace AdamDotCom.Amazon.UnitTests
                 productDTOs.Add(productDTO);
             }
 
-            IList<ReviewDTO> reviewDTOs = new List<ReviewDTO>();
+            List<ReviewDTO> reviewDTOs = new List<ReviewDTO>();
             for (int i = 5; i < 15; i++)
             {
                 ReviewDTO reviewDTO = new ReviewDTO();

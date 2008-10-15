@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using AdamDotCom.Amazon.WebServiceTranslator;
 using AdamDotCom.Amazon.WebServiceTranslator.com.amazon.webservices;
+using AdamDotCom.Amazon.WebServiceTranslator.Interfaces;
 
 namespace AdamDotCom.Amazon.WebServiceTranslator
 {
@@ -87,13 +88,14 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
 
         private IProductDTO MapProduct(Item productItem)
         {
-            IProductDTO productToReturn = new ProductDTO();
-
-            productToReturn.ASIN = productItem.ASIN;
-            productToReturn.Title = productItem.ItemAttributes.Title;
-            productToReturn.Authors = productItem.ItemAttributes.Author;
-            productToReturn.Url = productItem.DetailPageURL;
-            productToReturn.Publisher = productItem.ItemAttributes.Manufacturer;
+            IProductDTO productToReturn = new ProductDTO()
+            {
+                ASIN = productItem.ASIN,
+                Title = productItem.ItemAttributes.Title,
+                Authors = productItem.ItemAttributes.Author,
+                Url = productItem.DetailPageURL,
+                Publisher = productItem.ItemAttributes.Manufacturer
+            };
 
             return productToReturn;
         }

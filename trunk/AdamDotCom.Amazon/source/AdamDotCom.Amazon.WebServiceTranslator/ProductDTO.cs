@@ -1,4 +1,4 @@
-﻿using AdamDotCom.Amazon.WebServiceTranslator;
+﻿using AdamDotCom.Amazon.WebServiceTranslator.Interfaces;
 
 namespace AdamDotCom.Amazon.WebServiceTranslator
 {

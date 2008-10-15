@@ -1,4 +1,6 @@
-﻿namespace AdamDotCom.Amazon.Application
+﻿using AdamDotCom.Amazon.Application.Interfaces;
+
+namespace AdamDotCom.Amazon.Application
 {
     public class FileParameters : IFileParameters
     {

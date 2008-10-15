@@ -1,53 +1,63 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using AdamDotCom.Amazon.Domain.Extensions;
 using AdamDotCom.Amazon.Domain.Interfaces;
 using AdamDotCom.Amazon.WebServiceTranslator;
+using System.Linq.Expressions;
 
 namespace AdamDotCom.Amazon.Domain
 {
     public class ReviewListMapper: IReviewListMapper
     {
         private IAmazonRequest amazonRequest;
-        private IList<ReviewDTO> reviews;
-        private IList<ProductDTO> products;
+        private List<ReviewDTO> reviews;
+        private List<ProductDTO> products;
         private List<string> errors;
 
-        public ReviewListMapper(IAmazonRequest amazonRequest, IList<ReviewDTO> reviews, IList<ProductDTO> products)
+        public ReviewListMapper(IAmazonRequest amazonRequest, List<ReviewDTO> reviews, List<ProductDTO> products)
         {
             this.amazonRequest = amazonRequest;
 
             this.reviews = reviews;
             this.products = products;
+            errors = new List<string>();
         }
 
         public ReviewListMapper(IAmazonRequest amazonRequest)
         {
             this.amazonRequest = amazonRequest;
+            errors = new List<string>();
 
             ReviewMapper reviewMapper = new ReviewMapper(amazonRequest.AWSAccessKeyId, amazonRequest.AssociateTag,
                                                          amazonRequest.CustomerId);
-            reviews = reviewMapper.GetReviews();
-
-            errors = reviewMapper.GetErrors();
-
-            List<string> ASINList = new List<string>();
-            foreach (ReviewDTO review in reviews)
+            using (reviewMapper)
             {
-                ASINList.Add(review.ASIN);
+                reviews = reviewMapper.GetReviews();
+
+                foreach (string error in reviewMapper.GetErrors())
+                {
+                    errors.Add(error);
+                }
+
             }
 
             ProductMapper productMapper = new ProductMapper(amazonRequest.AWSAccessKeyId, amazonRequest.AssociateTag);
-            products = productMapper.GetProducts(ASINList);
 
-            foreach (string error in productMapper.GetErrors())
+            using(productMapper)
             {
-                errors.Add(error);
+                products = productMapper.GetProducts(reviews.ConvertAll(review => review.ASIN));
+
+                foreach (string error in productMapper.GetErrors())
+                {
+                    errors.Add(error);
+                }
             }
         }
 
         public virtual List<Review> GetReviewList()
         {
-            return MergeProductsWithReviews(products, reviews);
+            return MapProductsAndReviews(products, reviews);
         }
 
         public virtual List<string> GetErrors()
@@ -55,44 +65,37 @@ namespace AdamDotCom.Amazon.Domain
             return errors;
         }
 
-        private Review MergeProductWithReview(ProductDTO product, ReviewDTO review)
+        private Review MapProductAndReview(ProductDTO product, ReviewDTO review)
         {
-            Review reviewToReturn = new Review();
+            Review reviewToReturn = new Review()
+            {
+                ASIN = product.ASIN,
+                Authors = product.Authors(),
+                AuthorsMLA = product.AuthorsInMlaFormat(),
+                ImageUrl = product.ProductImageUrl(amazonRequest.AssociateTag),
+                ProductPreviewUrl = product.ProductPreviewUrl(amazonRequest.AssociateTag),
+                Publisher = product.Publisher,
+                Title = product.Title,
+                Url = product.Url,
 
-            reviewToReturn.ASIN = product.ASIN;
-            reviewToReturn.Authors = product.MapAuthors();
-            reviewToReturn.AuthorsMLA = product.MapAuthorsInMlaFormat();
-            reviewToReturn.Content = review.Content;
-            reviewToReturn.Date = review.Date;
-            reviewToReturn.HelpfulVotes = review.HelpfulVotes;
-            reviewToReturn.ImageUrl = product.ProductImageUrl(amazonRequest.AssociateTag);
-            reviewToReturn.ProductPreviewUrl = product.ProductPreviewUrl(amazonRequest.AssociateTag);
-            reviewToReturn.Publisher = product.Publisher;
-            reviewToReturn.Rating = review.Rating;
-            reviewToReturn.Summary = review.Summary;
-            reviewToReturn.Title = product.Title;
-            reviewToReturn.TotalVotes = review.TotalVotes;
-            reviewToReturn.Url = product.Url;
+                Content = review.Content,
+                Date = review.Date,
+                HelpfulVotes = review.HelpfulVotes,
+                Rating = review.Rating,
+                Summary = review.Summary,
+                TotalVotes = review.TotalVotes
+            };
 
             return reviewToReturn;
         }
 
-        private List<Review> MergeProductsWithReviews(IList<ProductDTO> products, IList<ReviewDTO> reviews)
+        private List<Review> MapProductsAndReviews(IList<ProductDTO> products, IList<ReviewDTO> reviews)
         {
-            List<Review> reviewsToReturn = new List<Review>();
+            var results = from product in products
+                        join review in reviews on product.ASIN equals review.ASIN
+                        select MapProductAndReview(product, review);
 
-            foreach(ReviewDTO review in reviews)
-            {
-                foreach(ProductDTO product in products)
-                {
-                    if (review.ASIN == product.ASIN)
-                    {
-                        reviewsToReturn.Add(MergeProductWithReview(product, review));
-                    }
-                }
-            }
-
-            return reviewsToReturn;
+            return results.ToList().ConvertAll(ent => ent); 
         }
     }
 }
