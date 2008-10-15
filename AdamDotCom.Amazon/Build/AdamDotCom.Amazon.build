@@ -6,48 +6,47 @@
 	<target name="all" depends="compile test"/>
 	
 	<target name="init" description="performs the initializations for a build" depends="clean">
-		<mkdir dir="Build"/>
+		<mkdir dir="bin"/>
 	</target>
 	
 	<target name="clean" description="removes all generated build products">
-		<delete dir="Build" if="${directory::exists('build')}" />
+		<delete dir="bin" if="${directory::exists('bin')}" />
 	</target>
 	
 	<target name="compile" description="compiles the library DLLs used by the application" depends="init">
-		<csc target="library" output="Build\AdamDotCom.Amazon.dll" debug="false" warninglevel="0" >
+		<csc target="library" output="bin\AdamDotCom.Amazon.dll" debug="false" warninglevel="0" >
 			<sources>
-				<include name="Source\AdamDotCom.Amazon.Application\**\*.cs"/>
-				<include name="Source\AdamDotCom.Amazon.WebServiceTranslator\**\*.cs"/>
-				<include name="Source\AdamDotCom.Amazon.Domain\**\*.cs"/>
-				<include name="Source\AdamDotCom.Amazon.DTO\**\*.cs"/>
+				<include name="..\Source\AdamDotCom.Amazon.Application\**\*.cs"/>
+				<include name="..\Source\AdamDotCom.Amazon.WebServiceTranslator\**\*.cs"/>
+				<include name="..\Source\AdamDotCom.Amazon.Domain\**\*.cs"/>
 			</sources>
 		</csc>
 	</target>
 
 	<target name="test.prepare" description="prepares the test folder to execute tests - this is shared by the test and test.ncover targets" >
-		<copy todir="build" flatten="true">
-			<fileset basedir="3rdParty\nunit\bin">
+		<copy todir="bin" flatten="true">
+			<fileset basedir="..\3rdParty\nunit\bin">
 				<include name="*.dll" />
 			</fileset>
 		</copy>
 	</target>
 	
 	<target name="test.compile" description="compiles the unit tests" depends="compile test.prepare">
-		<csc target="library" output="build\${project::get-name()}.UnitTests.dll" debug="false">
+		<csc target="library" output="bin\${project::get-name()}.UnitTests.dll" debug="false">
 			<references>
-				<include name="build\*.dll" />
+				<include name="bin\*.dll" />
 			</references>
 			<sources>
-				<include name="Source\AdamDotCom.Amazon.UnitTests\**\*.cs" />
+				<include name="..\Source\AdamDotCom.Amazon.UnitTests\**\*.cs" />
 			</sources>
 		</csc>
 	</target>
 	
 	<target name="test" description="runs the unit tests" depends="test.compile">
 		<echo message="Executing unit tests..."/>
-		<exec basedir="3rdParty\nunit\bin"
+		<exec basedir="..\3rdParty\nunit\bin"
 			
-			workingdir="build"
+			workingdir="bin"
 			program="nunit-console.exe"
 			commandline="${project::get-name()}.UnitTests.dll /xml=${project::get-name()}.UnitTests-Result.xml" />	
 	</target>
