@@ -12,16 +12,20 @@ namespace AdamDotCom.Amazon.UnitTests
         [Test]
         public void ShouldSerializeObject()
         {
-            IAmazonRequest amazonRequest = new AmazonRequest();
-            amazonRequest.AssociateTag = "adamkahtavaap-20";
-            amazonRequest.AWSAccessKeyId = "1MRFMGASE6CQKS2WTMR2";
-            amazonRequest.CustomerId = "A2JM0EQJELFL69";
-            amazonRequest.ListId = "3JU6ASKNUS7B8";
+            IAmazonRequest amazonRequest = new AmazonRequest()
+            {
+                AssociateTag = "adamkahtavaap-20",
+                AWSAccessKeyId = "1MRFMGASE6CQKS2WTMR2",
+                CustomerId = "A2JM0EQJELFL69",
+                ListId = "3JU6ASKNUS7B8"
+            };
 
-            IFileParameters fileParameters = new FileParameters();
-            fileParameters.ProductFileNameAndPath = @"Products.xml";
-            fileParameters.ReviewFileNameAndPath = @"Reviews.xml";
-            fileParameters.ErrorFileNameAndPath = @"Errors.xml";
+            IFileParameters fileParameters = new FileParameters()
+            {
+                ProductFileNameAndPath = @"Products.xml",
+                ReviewFileNameAndPath = @"Reviews.xml",
+                ErrorFileNameAndPath = @"Errors.xml"   
+            };
 
             IAmazonApplication amazonApplication = new AmazonApplication(amazonRequest, fileParameters);
             
