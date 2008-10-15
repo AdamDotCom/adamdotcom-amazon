@@ -32,5 +32,21 @@ namespace AdamDotCom.Amazon.UnitTests
                 Debug.WriteLine(review.ASIN);
             }
         }
+
+        [Test]
+        public void ShouldBeAbleToGetReviewsFromAmazonWithNoErrors()
+        {
+            reviewMapper.GetReviews();
+
+            IList<string> errors = reviewMapper.GetErrors();
+
+            foreach (string error in errors)
+            {
+                Debug.WriteLine(error);
+            }
+
+            Assert.AreEqual(0, errors.Count);
+        }
+
     }
 }

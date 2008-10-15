@@ -10,33 +10,34 @@ namespace AdamDotCom.Amazon.UnitTests
     public class ProductMapperTest
     {
         private IProductMapper productMapper;
+        private List<string> ASINList;
 
         [TestFixtureSetUp]
         protected void SetUp()
         {
             productMapper = new ProductMapper("1MRFMGASE6CQKS2WTMR2", "adamkahtavaap-20");
+
+            ASINList = new List<string>()
+            {
+                "1556159005",
+                "0201485672",
+                "0471137723",
+                "0132624788",
+                "0471467413",
+                "0735618798",
+                "1886411972",
+                "0131495054",
+                "0673386023",
+                "1883577039",
+                "0262560992",
+                "026256100X",
+                "0262562146"
+            };
         }
 
         [Test]
         public void ShouldBeAbleToGetProductsFromAmazon()
         {
-            List<string> ASINList = new List<string>();
-
-            ASINList.Add("1556159005");
-            ASINList.Add("0201485672");
-            ASINList.Add("0471137723");
-            ASINList.Add("0132624788");
-            ASINList.Add("0471467413");
-            ASINList.Add("0735618798");
-            ASINList.Add("1886411972");
-            ASINList.Add("0131495054");
-            ASINList.Add("0673386023");
-            ASINList.Add("1883577039");
-            ASINList.Add("0262560992");
-            ASINList.Add("026256100X");
-            ASINList.Add("0262562146");
-            //ASINList.Add("0201485419");
-
             IList<ProductDTO> products = productMapper.GetProducts(ASINList);
 
             Assert.AreEqual(ASINList.Count, products.Count);
@@ -53,6 +54,21 @@ namespace AdamDotCom.Amazon.UnitTests
 
             Assert.IsNotNull(products[0].Authors);
 
+        }
+
+        [Test]
+        public void ShouldBeAbleToGetProductsFromAmazonWithNoErrors()
+        {
+            productMapper.GetProducts(ASINList);
+
+            IList<string> errors = productMapper.GetErrors();
+
+            foreach (string error in errors)
+            {
+                Debug.WriteLine(error);
+            }
+
+            Assert.AreEqual(0, errors.Count);
         }
     }
 }

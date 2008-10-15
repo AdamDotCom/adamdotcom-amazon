@@ -21,7 +21,7 @@ namespace AdamDotCom.Amazon.UnitTests
         }
 
         [Test]
-        public void ShouldInvokeAndReturnSuccessfulProductsAndReviews()
+        public void ShouldInvokeAndReturnSuccessfulProductsAndReviewsWithNoErrors()
         {
             amazonRequest.AssociateTag = "adamkahtavaap-20";
             amazonRequest.AWSAccessKeyId = "1MRFMGASE6CQKS2WTMR2";
@@ -41,6 +41,8 @@ namespace AdamDotCom.Amazon.UnitTests
 
             Assert.AreNotEqual(null, amazonResponse.Reviews);
             Assert.Greater(amazonResponse.Reviews.Count, 10, errors);
+
+            Assert.AreEqual(amazonResponse.Errors.Count, 0, errors);
 
         }
 
