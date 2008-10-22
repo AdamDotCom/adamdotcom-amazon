@@ -39,20 +39,14 @@ namespace AdamDotCom.Amazon.Domain
             {
                 amazonResponse.Products = productListMapper.GetList();
 
-                foreach (string error in productListMapper.GetErrors())
-                {
-                    amazonResponse.Errors.Add(error);
-                }
+                amazonResponse.Errors.AddRange(productListMapper.GetErrors());
             }
 
             if (reviewListMapper != null)
             {
                 amazonResponse.Reviews = reviewListMapper.GetReviewList();
 
-                foreach (string error in reviewListMapper.GetErrors())
-                {
-                    amazonResponse.Errors.Add(error);
-                }
+                amazonResponse.Errors.AddRange(reviewListMapper.GetErrors());
             }
 
             return amazonResponse;

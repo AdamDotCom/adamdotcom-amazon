@@ -16,9 +16,16 @@
 	<target name="compile" description="compiles the library DLLs used by the application" depends="init">
 		<csc target="library" output="bin\AdamDotCom.Amazon.dll" debug="false" warninglevel="0" >
 			<sources>
-				<include name="..\Source\AdamDotCom.Amazon.Application\**\*.cs"/>
 				<include name="..\Source\AdamDotCom.Amazon.WebServiceTranslator\**\*.cs"/>
 				<include name="..\Source\AdamDotCom.Amazon.Domain\**\*.cs"/>
+			</sources>
+		</csc>
+		<csc target="library" output="bin\AdamDotCom.Amazon.Application.dll" debug="false" warninglevel="0" >
+			<references>
+				<include name="bin\*.dll" />
+			</references>
+			<sources>
+				<include name="..\Source\AdamDotCom.Amazon.Application\**\*.cs"/>
 			</sources>
 		</csc>
 	</target>

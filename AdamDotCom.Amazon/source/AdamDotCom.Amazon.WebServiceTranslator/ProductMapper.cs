@@ -74,10 +74,7 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
                         break;
                     }
 
-                    foreach (ProductDTO product in MapProducts(itemSearchResponse.Items))
-                    {
-                        productsToReturn.Add(product);
-                    }
+                    productsToReturn.AddRange(MapProducts(itemSearchResponse.Items));
 
                     myItemSearchRequests = new ItemSearchRequest[2];
                 }
@@ -86,9 +83,9 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
             return productsToReturn;
         }
 
-        private IProductDTO MapProduct(Item productItem)
+        private ProductDTO MapProduct(Item productItem)
         {
-            IProductDTO productToReturn = new ProductDTO()
+            var productToReturn = new ProductDTO()
             {
                 ASIN = productItem.ASIN,
                 Title = productItem.ItemAttributes.Title,
@@ -100,9 +97,9 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
             return productToReturn;
         }
 
-        private List<IProductDTO> MapProducts(Items[] productList)
+        private List<ProductDTO> MapProducts(Items[] productList)
         {
-            List<IProductDTO> productsToReturn = new List<IProductDTO>();
+            var productsToReturn = new List<ProductDTO>();
 
             foreach (Items listItem in productList)
             {
@@ -110,9 +107,8 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
                 {
                     continue;
                 }
-                IProductDTO productToReturn = MapProduct(listItem.Item[0]);
 
-                productsToReturn.Add(productToReturn);
+                productsToReturn.Add(MapProduct(listItem.Item[0]));
             }
 
             return productsToReturn;

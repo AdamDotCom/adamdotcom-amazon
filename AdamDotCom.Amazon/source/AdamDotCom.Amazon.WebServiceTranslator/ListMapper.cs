@@ -69,20 +69,17 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
                         MapErrors(listLookupResponse.OperationRequest.Errors);
                     }
                     break;
-                }              
-
-                foreach (ListItemDTO wishListItem in MapListItems(listLookupResponse.Lists[0].List[0].ListItem))
-                {
-                    listItemsToReturn.Add(wishListItem);
                 }
+
+                listItemsToReturn.AddRange(MapListItems(listLookupResponse.Lists[0].List[0].ListItem));
             }
 
             return listItemsToReturn;
         }
 
-        private IListItemDTO MapListItem(Item listItem)
+        private ListItemDTO MapListItem(Item listItem)
         {
-            IListItemDTO listItemToReturn = new ListItemDTO()
+            var listItemToReturn = new ListItemDTO()
             {
                 ASIN = listItem.ASIN 
             };
@@ -90,15 +87,13 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
             return listItemToReturn;
         }
 
-        private List<IListItemDTO> MapListItems(ListItem[] listItems)
+        private List<ListItemDTO> MapListItems(ListItem[] listItems)
         {
-            List<IListItemDTO> listItemsToReturn = new List<IListItemDTO>();
+            var listItemsToReturn = new List<ListItemDTO>();
 
             foreach (ListItem listItem in listItems)
             {
-                IListItemDTO listItemToReturn = MapListItem(listItem.Item);
-
-                listItemsToReturn.Add(listItemToReturn);
+                listItemsToReturn.Add(MapListItem(listItem.Item));
             }
 
             return listItemsToReturn;

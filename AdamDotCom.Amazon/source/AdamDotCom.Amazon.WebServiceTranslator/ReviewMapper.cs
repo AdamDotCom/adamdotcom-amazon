@@ -74,10 +74,8 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
                     Convert.ToInt32(
                         customerContentLookupResponse.Customers[0].Customer[0].CustomerReviews[0].TotalReviewPages);
 
-                foreach (ReviewDTO review in MapReviews(customerContentLookupResponse.Customers[0].Customer[0].CustomerReviews[0].Review))
-                {
-                    reviewsToReturn.Add(review);
-                }
+                reviewsToReturn.AddRange(
+                    MapReviews(customerContentLookupResponse.Customers[0].Customer[0].CustomerReviews[0].Review));
             }
 
             return reviewsToReturn;
@@ -85,7 +83,7 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
 
         private ReviewDTO MapReview(Review review)
         {
-            ReviewDTO reviewToReturn = new ReviewDTO()
+            var reviewToReturn = new ReviewDTO()
             {
                 ASIN = review.ASIN,
                 Rating = review.Rating,
@@ -101,13 +99,11 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
 
         private List<ReviewDTO> MapReviews(Review[] reviews)
         {
-            List<ReviewDTO> reviewsToReturn = new List<ReviewDTO>();
+            var reviewsToReturn = new List<ReviewDTO>();
 
             foreach (Review review in reviews)
             {
-                ReviewDTO reviewToReturn = MapReview(review);
-
-                reviewsToReturn.Add(reviewToReturn);
+                reviewsToReturn.Add(MapReview(review));
             }
 
             return reviewsToReturn;
