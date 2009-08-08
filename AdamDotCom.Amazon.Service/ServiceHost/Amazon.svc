@@ -1,17 +1,1 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="AdamDotCom.Amazon.Service.AmazonService" Factory="AdamDotCom.Amazon.Service.AppServiceHostFactory"%>
-
-using System;
-using System.ServiceModel;
-using System.ServiceModel.Activation;
-using Microsoft.ServiceModel.Web;
-
-namespace AdamDotCom.Amazon.Service 
-{
-  class AppServiceHostFactory : ServiceHostFactory
-  {
-    protected override ServiceHost CreateServiceHost(Type serviceType, Uri[] baseAddresses)
-    {
-        return new WebServiceHost2(serviceType, true, baseAddresses);
-    }
-  }
-}
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="AdamDotCom.Amazon.Service.AmazonService" %>
