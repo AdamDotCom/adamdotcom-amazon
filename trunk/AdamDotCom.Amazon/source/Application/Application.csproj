@@ -3,9 +3,9 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{0BED96A7-D92F-49C2-BD30-97D301E3316D}</ProjectGuid>
+    <ProjectGuid>{6007DFE2-E977-4183-85A7-A72D291D4A38}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AdamDotCom.Amazon.Application</RootNamespace>
@@ -38,15 +38,15 @@
     <Compile Include="AmazonApplication.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AdamDotCom.Amazon.Domain\AdamDotCom.Amazon.Domain.csproj">
-      <Project>{8AAA89A1-7D7D-4E43-9BDC-79C23B5DBBDE}</Project>
-      <Name>AdamDotCom.Amazon.Domain</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\Domain.csproj">
+      <Project>{E7FD49C2-3B63-45D0-88C1-52B4915662C2}</Project>
+      <Name>Domain %28Domain\Domain%29</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
