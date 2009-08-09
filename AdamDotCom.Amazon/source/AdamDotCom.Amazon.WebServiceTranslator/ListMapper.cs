@@ -31,9 +31,9 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
 
         public virtual List<ListItemDTO> GetList()
         {
-            List<ListItemDTO> listItemsToReturn = new List<ListItemDTO>(); 
+            var listItemsToReturn = new List<ListItemDTO>(); 
             
-            ListLookupResponse listLookupResponse = new ListLookupResponse();
+            var listLookupResponse = new ListLookupResponse();
 
             //Amazon Lists can return 300 items at 10 items per page and 
             // I can't figure out how to find the total number of pages number in the Amazon Response
@@ -41,21 +41,24 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
             for (int currentPageRequest = 1; currentPageRequest <= 30; currentPageRequest++)
             {
 
-                ListLookupRequest listLookupRequest = new ListLookupRequest();
-                listLookupRequest.ListId = listId;
-                listLookupRequest.ListType = ListLookupRequestListType.WishList;
-                listLookupRequest.ListTypeSpecified = true;
-                listLookupRequest.ProductGroup = "Book";
-                listLookupRequest.ResponseGroup = new[] { "ItemIds", "Small" };
-
-                listLookupRequest.ProductPage = currentPageRequest.ToString();
+                var listLookupRequest = new ListLookupRequest
+                                            {
+                                                ListId = listId,
+                                                ListType = ListLookupRequestListType.WishList,
+                                                ListTypeSpecified = true,
+                                                ProductGroup = "Book",
+                                                ResponseGroup = new[] {"ItemIds", "Small"},
+                                                ProductPage = currentPageRequest.ToString()
+                                            };
 
                 var requests = new[] { listLookupRequest };
 
-                ListLookup listLookup = new ListLookup();
-                listLookup.AWSAccessKeyId = awsAccessKeyId;
-                listLookup.AssociateTag = associateTag;
-                listLookup.Request = requests;
+                var listLookup = new ListLookup
+                                     {
+                                         AWSAccessKeyId = awsAccessKeyId,
+                                         AssociateTag = associateTag,
+                                         Request = requests
+                                     };
 
                 using (awseCommerceService)
                 {
@@ -77,7 +80,7 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
             return listItemsToReturn;
         }
 
-        private ListItemDTO MapListItem(Item listItem)
+        private static ListItemDTO MapListItem(Item listItem)
         {
             var listItemToReturn = new ListItemDTO()
             {
@@ -87,7 +90,7 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
             return listItemToReturn;
         }
 
-        private List<ListItemDTO> MapListItems(ListItem[] listItems)
+        private static List<ListItemDTO> MapListItems(IEnumerable<ListItem> listItems)
         {
             var listItemsToReturn = new List<ListItemDTO>();
 
@@ -99,7 +102,7 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
             return listItemsToReturn;
         }
 
-        private void MapErrors(ErrorsError[] listErrors)
+        private void MapErrors(IEnumerable<ErrorsError> listErrors)
         {
             foreach (ErrorsError error in listErrors)
             {
