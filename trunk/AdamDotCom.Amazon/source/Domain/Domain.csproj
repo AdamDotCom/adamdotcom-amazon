@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{8AAA89A1-7D7D-4E43-9BDC-79C23B5DBBDE}</ProjectGuid>
+    <ProjectGuid>{E7FD49C2-3B63-45D0-88C1-52B4915662C2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AdamDotCom.Amazon.Domain</RootNamespace>
@@ -68,9 +68,9 @@
     <Compile Include="ReviewListMapper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AdamDotCom.Amazon.WebServiceTranslator\AdamDotCom.Amazon.WebServiceTranslator.csproj">
-      <Project>{65D0478A-895F-48BB-A36E-C4AD1E28132E}</Project>
-      <Name>AdamDotCom.Amazon.WebServiceTranslator</Name>
+    <ProjectReference Include="..\WebServiceTranslator\WebServiceTranslator.csproj">
+      <Project>{0F195E24-AE6B-4FAF-8255-877CDBB566F7}</Project>
+      <Name>WebServiceTranslator</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
