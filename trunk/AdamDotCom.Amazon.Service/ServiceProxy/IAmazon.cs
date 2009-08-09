@@ -7,7 +7,11 @@ namespace AdamDotCom.Amazon.Service.Proxy
     public interface IAmazon
     {
         [OperationContract]
-        [WebGet(UriTemplate = "greet/{name}")]
-        string Greet(string name);
+        [WebGet(UriTemplate = "reviews/{customerId}/xml")]
+        AmazonResponse Reviews(string customerId);
+
+        [OperationContract]
+        [WebGet(UriTemplate = "wishlist/{listId}/xml")]
+        AmazonResponse Wishlist(string listId);
     }
 }
