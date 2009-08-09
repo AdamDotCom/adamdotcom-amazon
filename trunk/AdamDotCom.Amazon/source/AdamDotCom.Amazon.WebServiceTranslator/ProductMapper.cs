@@ -29,20 +29,22 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
 
         public virtual List<ProductDTO> GetProducts(List<string> asinList)
         {
-            List<ProductDTO> productsToReturn = new List<ProductDTO>();
+            var productsToReturn = new List<ProductDTO>();
 
-            ItemSearchRequest[] allItemSearchRequests = new ItemSearchRequest[asinList.Count];
+            var allItemSearchRequests = new ItemSearchRequest[asinList.Count];
 
             for (int i = 0; i < asinList.Count; i++ )
             {
-                allItemSearchRequests[i] = new ItemSearchRequest();
-                allItemSearchRequests[i].SearchIndex = "Books";
-                allItemSearchRequests[i].Power = "asin:" + asinList[i];
-                allItemSearchRequests[i].ResponseGroup = new[] { "Small" };
+                allItemSearchRequests[i] = new ItemSearchRequest
+                                               {
+                                                   SearchIndex = "Books",
+                                                   Power = ("asin:" + asinList[i]),
+                                                   ResponseGroup = new[] {"Small"}
+                                               };
             }
 
             //ItemSearchRequest can only be made in 2's
-            ItemSearchRequest[] myItemSearchRequests = new ItemSearchRequest[2];
+            var myItemSearchRequests = new ItemSearchRequest[2];
 
             bool isASINListOdd = (asinList.Count % 2 != 0);
 
@@ -52,10 +54,12 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
 
                 if ((i != 0 && ((i + 1)%2 == 0)) || (isASINListOdd && asinList.Count == (i + 1)))
                 {
-                    ItemSearch itemSearch = new ItemSearch();
-                    itemSearch.AWSAccessKeyId = awsAccessKeyId;
-                    itemSearch.AssociateTag = associateTag;
-                    itemSearch.Request = myItemSearchRequests;
+                    var itemSearch = new ItemSearch
+                                         {
+                                             AWSAccessKeyId = awsAccessKeyId,
+                                             AssociateTag = associateTag,
+                                             Request = myItemSearchRequests
+                                         };
 
                     ItemSearchResponse itemSearchResponse;
 
@@ -83,7 +87,7 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
             return productsToReturn;
         }
 
-        private ProductDTO MapProduct(Item productItem)
+        private static ProductDTO MapProduct(Item productItem)
         {
             var productToReturn = new ProductDTO()
             {
@@ -97,7 +101,7 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
             return productToReturn;
         }
 
-        private List<ProductDTO> MapProducts(Items[] productList)
+        private static List<ProductDTO> MapProducts(IEnumerable<Items> productList)
         {
             var productsToReturn = new List<ProductDTO>();
 
@@ -114,7 +118,7 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
             return productsToReturn;
         }
 
-        private void MapErrors(ErrorsError[] listErrors)
+        private void MapErrors(IEnumerable<ErrorsError> listErrors)
         {
             foreach (ErrorsError error in listErrors)
             {

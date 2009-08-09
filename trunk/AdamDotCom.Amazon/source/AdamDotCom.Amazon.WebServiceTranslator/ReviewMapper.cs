@@ -31,25 +31,28 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
 
         public virtual List<ReviewDTO> GetReviews()
         {
-            List<ReviewDTO> reviewsToReturn = new List<ReviewDTO>();
+            var reviewsToReturn = new List<ReviewDTO>();
 
             int numberOfReviewPages = 1;
 
             for (int currentPageRequest = 1; currentPageRequest <= numberOfReviewPages; currentPageRequest++)
             {
 
-                CustomerContentLookupRequest customerContentLookupRequest = new CustomerContentLookupRequest();
+                var customerContentLookupRequest = new CustomerContentLookupRequest
+                                                       {
+                                                           CustomerId = customerId,
+                                                           ResponseGroup = new[] {"CustomerReviews"},
+                                                           ReviewPage = currentPageRequest.ToString()
+                                                       };
 
-                customerContentLookupRequest.CustomerId = customerId;
-                customerContentLookupRequest.ResponseGroup = new[] {"CustomerReviews"};
-                customerContentLookupRequest.ReviewPage = currentPageRequest.ToString();
+                var customerContentLookupRequests = new[] {customerContentLookupRequest};
 
-                CustomerContentLookupRequest[] customerContentLookupRequests = new[] {customerContentLookupRequest};
-
-                CustomerContentLookup customerContentLookup = new CustomerContentLookup();
-                customerContentLookup.AWSAccessKeyId = awsAccessKeyId;
-                customerContentLookup.AssociateTag = associateTag;
-                customerContentLookup.Request = customerContentLookupRequests;
+                var customerContentLookup = new CustomerContentLookup
+                                                {
+                                                    AWSAccessKeyId = awsAccessKeyId,
+                                                    AssociateTag = associateTag,
+                                                    Request = customerContentLookupRequests
+                                                };
 
                 CustomerContentLookupResponse customerContentLookupResponse;
                 using (awseCommerceService)
@@ -57,7 +60,9 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
                     customerContentLookupResponse = awseCommerceService.CustomerContentLookup(customerContentLookup);
                 }
 
-                if (customerContentLookupResponse.Customers == null || customerContentLookupResponse.Customers[0].Customer == null)
+                if (customerContentLookupResponse.Customers == null ||
+                    customerContentLookupResponse.Customers[0].Customer == null ||
+                    customerContentLookupResponse.Customers[0].Customer[0].CustomerReviews == null)
                 {
                     if (customerContentLookupResponse.OperationRequest.Errors != null)
                     {
@@ -81,7 +86,7 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
             return reviewsToReturn;
         }
 
-        private ReviewDTO MapReview(Review review)
+        private static ReviewDTO MapReview(Review review)
         {
             var reviewToReturn = new ReviewDTO()
             {
@@ -97,7 +102,7 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
             return reviewToReturn;
         }
 
-        private List<ReviewDTO> MapReviews(Review[] reviews)
+        private static List<ReviewDTO> MapReviews(IEnumerable<Review> reviews)
         {
             var reviewsToReturn = new List<ReviewDTO>();
 
@@ -109,7 +114,7 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
             return reviewsToReturn;
         }
 
-        private void MapErrors(ErrorsError[] listErrors)
+        private void MapErrors(IEnumerable<ErrorsError> listErrors)
         {
             foreach (ErrorsError error in listErrors)
             {
