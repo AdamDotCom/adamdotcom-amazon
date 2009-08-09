@@ -16,8 +16,8 @@
 	<target name="compile" description="compiles the library DLLs used by the application" depends="init">
 		<csc target="library" output="bin\AdamDotCom.Amazon.dll" debug="false" warninglevel="0" >
 			<sources>
-				<include name="..\Source\AdamDotCom.Amazon.WebServiceTranslator\**\*.cs"/>
-				<include name="..\Source\AdamDotCom.Amazon.Domain\**\*.cs"/>
+				<include name="..\Source\WebServiceTranslator\**\*.cs"/>
+				<include name="..\Source\Domain\**\*.cs"/>
 			</sources>
 		</csc>
 		<csc target="library" output="bin\AdamDotCom.Amazon.Application.dll" debug="false" warninglevel="0" >
@@ -25,37 +25,37 @@
 				<include name="bin\*.dll" />
 			</references>
 			<sources>
-				<include name="..\Source\AdamDotCom.Amazon.Application\**\*.cs"/>
+				<include name="..\Source\Application\**\*.cs"/>
 			</sources>
 		</csc>
 	</target>
 
 	<target name="test.prepare" description="prepares the test folder to execute tests - this is shared by the test and test.ncover targets" >
 		<copy todir="bin" flatten="true">
-			<fileset basedir="..\3rdParty\nunit\bin">
+			<fileset basedir="..\Dependencies\nunit\bin">
 				<include name="*.dll" />
 			</fileset>
 		</copy>
 	</target>
 	
 	<target name="test.compile" description="compiles the unit tests" depends="compile test.prepare">
-		<csc target="library" output="bin\${project::get-name()}.UnitTests.dll" debug="false">
+		<csc target="library" output="bin\${project::get-name()}.Integration.Tests.dll" debug="false">
 			<references>
 				<include name="bin\*.dll" />
 			</references>
 			<sources>
-				<include name="..\Source\AdamDotCom.Amazon.UnitTests\**\*.cs" />
+				<include name="..\Source\Integration.Tests\**\*.cs" />
 			</sources>
 		</csc>
 	</target>
 	
 	<target name="test" description="runs the unit tests" depends="test.compile">
 		<echo message="Executing unit tests..."/>
-		<exec basedir="..\3rdParty\nunit\bin"
+		<exec basedir="..\Dependencies\nunit\bin"
 			
 			workingdir="bin"
 			program="nunit-console.exe"
-			commandline="${project::get-name()}.UnitTests.dll /xml=${project::get-name()}.UnitTests-Result.xml" />	
+			commandline="${project::get-name()}.Integration.Tests.dll /xml=${project::get-name()}.UnitTests-Result.xml" />	
 	</target>
 
 </project>
