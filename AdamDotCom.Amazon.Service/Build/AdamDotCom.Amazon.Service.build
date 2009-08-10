@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<project name="AdamDotCom.Amazon.Services" default="all">
+
+	<property name="nant.settings.currentframework" value="net-3.5" />	
+	
+	<target name="all" depends="compile test"/>
+
+	<target name="clean" description="removes all generated build products">
+		<delete>
+		  <fileset>
+		    <include name="..\Final-Assemblies\*.*" />
+	    </fileset>
+	  </delete>
+	</target>
+	
+	<target name="copy-dependencies">
+	  <copy todir="..\Final-Assemblies">
+      <fileset basedir="..\Dependencies">
+        <include name="AdamDotCom.Amazon.dll" />
+      </fileset>
+    </copy>
+  </target>
+
+	<target name="compile" description="compiles the library DLLs used by the application" depends="clean copy-dependencies">
+		<csc target="library" output="..\Final-Assemblies\AdamDotCom.Amazon.Service.dll" debug="false" warninglevel="0" >
+			<references>
+				<include name="..\Final-Assemblies\*.dll" />
+			</references>
+			<sources>
+				<include name="..\Source\Service\**\*.cs"/>
+			</sources>
+		</csc>
+		<csc target="library" output="..\Final-Assemblies\AdamDotCom.Amazon.Service.Host.dll" debug="false" warninglevel="0" >
+			<references>
+				<include name="..\Final-Assemblies\*.dll" />
+			</references>
+			<sources>
+				<include name="..\Source\ServiceHost\**\*.cs"/>
+			</sources>
+		</csc>
+		<csc target="library" output="..\Final-Assemblies\AdamDotCom.Amazon.Service.Proxy.dll" debug="false" warninglevel="0" >
+			<references>
+				<include name="..\Final-Assemblies\*.dll" />
+			</references>
+			<sources>
+				<include name="..\Source\ServiceProxy\**\*.cs"/>
+			</sources>
+		</csc>
+	</target>
+
+	<target name="test.prepare" description="prepares the test folder to execute tests - this is shared by the test and test.ncover targets" >
+		<delete>
+		  <fileset>
+		    <include name="bin\*.*" />
+	    </fileset>
+	  </delete>
+		<copy todir="bin" flatten="true">
+			<fileset basedir="..\Dependencies\nunit\bin">
+				<include name="*.dll" />
+			</fileset>
+		</copy>
+		<copy todir="bin" flatten="true">
+  		<fileset basedir="..\Final-Assemblies">
+				<include name="*.dll" />
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="test.compile" description="compiles the unit tests" depends="compile test.prepare">
+		<csc target="library" output="bin\${project::get-name()}.Integration.Tests.dll" debug="false">
+			<references>
+				<include name="..\Final-Assemblies\*.dll" />
+				<include name="..\Dependencies\nunit\bin\*.dll" />
+			</references>
+			<sources>
+				<include name="..\Source\Integration.Tests\**\*.cs" />
+			</sources>
+		</csc>
+	</target>
+	
+	<target name="test" description="runs the unit tests" depends="test.compile">
+		<echo message="Executing unit tests..."/>
+		<exec basedir="..\Dependencies\nunit\bin"
+			
+			workingdir="bin"
+			program="nunit-console.exe"
+			commandline="${project::get-name()}.Integration.Tests.dll /xml=${project::get-name()}.UnitTests-Result.xml" />	
+	</target>
+
+</project>
