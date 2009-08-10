@@ -9,6 +9,7 @@
 		<delete>
 		  <fileset>
 		    <include name="..\Final-Assemblies\*.*" />
+		    <include name="bin\**\*.*" />
 	    </fileset>
 	  </delete>	
 	</target>
