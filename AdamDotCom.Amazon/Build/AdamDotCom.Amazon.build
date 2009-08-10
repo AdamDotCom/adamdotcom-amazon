@@ -5,24 +5,24 @@
 	
 	<target name="all" depends="compile test"/>
 	
-	<target name="init" description="performs the initializations for a build" depends="clean">
-		<mkdir dir="bin"/>
-	</target>
-	
 	<target name="clean" description="removes all generated build products">
-		<delete dir="bin" if="${directory::exists('bin')}" />
+		<delete>
+		  <fileset>
+		    <include name="..\Final-Assemblies\*.*" />
+	    </fileset>
+	  </delete>	
 	</target>
 	
-	<target name="compile" description="compiles the library DLLs used by the application" depends="init">
-		<csc target="library" output="bin\AdamDotCom.Amazon.dll" debug="false" warninglevel="0" >
+	<target name="compile" description="compiles the library DLLs used by the application" depends="clean">
+		<csc target="library" output="..\Final-Assemblies\AdamDotCom.Amazon.dll" debug="false" warninglevel="0" >
 			<sources>
 				<include name="..\Source\WebServiceTranslator\**\*.cs"/>
 				<include name="..\Source\Domain\**\*.cs"/>
 			</sources>
 		</csc>
-		<csc target="library" output="bin\AdamDotCom.Amazon.Application.dll" debug="false" warninglevel="0" >
+		<csc target="library" output="..\Final-Assemblies\AdamDotCom.Amazon.Application.dll" debug="false" warninglevel="0" >
 			<references>
-				<include name="bin\*.dll" />
+				<include name="..\Final-Assemblies\*.dll" />
 			</references>
 			<sources>
 				<include name="..\Source\Application\**\*.cs"/>
@@ -31,11 +31,21 @@
 	</target>
 
 	<target name="test.prepare" description="prepares the test folder to execute tests - this is shared by the test and test.ncover targets" >
+		<delete>
+		  <fileset>
+		    <include name="bin\*.*" />
+	    </fileset>
+	  </delete>
 		<copy todir="bin" flatten="true">
 			<fileset basedir="..\Dependencies\nunit\bin">
 				<include name="*.dll" />
 			</fileset>
 		</copy>
+		<copy todir="bin" flatten="true">
+  		<fileset basedir="..\Final-Assemblies">
+				<include name="*.dll" />
+			</fileset>
+		</copy>		
 	</target>
 	
 	<target name="test.compile" description="compiles the unit tests" depends="compile test.prepare">
@@ -52,7 +62,6 @@
 	<target name="test" description="runs the unit tests" depends="test.compile">
 		<echo message="Executing unit tests..."/>
 		<exec basedir="..\Dependencies\nunit\bin"
-			
 			workingdir="bin"
 			program="nunit-console.exe"
 			commandline="${project::get-name()}.Integration.Tests.dll /xml=${project::get-name()}.UnitTests-Result.xml" />	
