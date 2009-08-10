@@ -33,11 +33,7 @@
   <ItemGroup>
     <Reference Include="AdamDotCom.Amazon, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\AdamDotCom.Amazon.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.ServiceModel.Web, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Program Files\Microsoft WCF REST\WCF REST Starter Kit Preview 2\Assemblies\Microsoft.ServiceModel.Web.dll</HintPath>
+      <HintPath>..\..\Dependencies\AdamDotCom.Amazon.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">

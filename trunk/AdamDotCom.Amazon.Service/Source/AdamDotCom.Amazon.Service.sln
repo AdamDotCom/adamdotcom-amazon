@@ -1,17 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service", "Source\Service", "{79D723FA-A676-46C6-A66A-4003B57644EF}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service", "Service", "{79D723FA-A676-46C6-A66A-4003B57644EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceProxy", "Source\ServiceProxy\ServiceProxy.csproj", "{E4DF02D4-26EC-4B7B-AACF-4699AE838284}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceProxy", "ServiceProxy\ServiceProxy.csproj", "{E4DF02D4-26EC-4B7B-AACF-4699AE838284}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integration.Tests", "Source\Integration.Tests", "{3AAC2516-0ADF-4E3F-8A09-7A985174618E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integration.Tests", "Integration.Tests", "{3AAC2516-0ADF-4E3F-8A09-7A985174618E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Integration.Tests", "Source\Integration.Tests\Integration.Tests.csproj", "{355BEB9B-54C0-4429-828C-1460E1E977CA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Integration.Tests", "Integration.Tests\Integration.Tests.csproj", "{355BEB9B-54C0-4429-828C-1460E1E977CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceHost", "Source\ServiceHost\ServiceHost.csproj", "{FEA22FE0-BC14-4520-A913-F6A4F8F98DC5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceHost", "ServiceHost\ServiceHost.csproj", "{FEA22FE0-BC14-4520-A913-F6A4F8F98DC5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "Source\Service\Service.csproj", "{E06D39A3-B851-45B0-869B-DB9574AF2001}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "Service\Service.csproj", "{E06D39A3-B851-45B0-869B-DB9574AF2001}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
