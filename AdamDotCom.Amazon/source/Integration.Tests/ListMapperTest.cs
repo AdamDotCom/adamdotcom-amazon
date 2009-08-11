@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using AdamDotCom.Amazon.WebServiceTranslator;
 using AdamDotCom.Amazon.WebServiceTranslator.Interfaces;
 using NUnit.Framework;
@@ -20,13 +19,13 @@ namespace AdamDotCom.Amazon.UnitTests
         [Test]
         public void ShouldBeAbleToGetListItemsFromAmazon()
         {
-            IList<ListItemDTO> listItems = listMapper.GetList();
+            var listItems = listMapper.GetList();
 
             Assert.AreNotEqual(0, listItems.Count);
 
             Assert.Greater(listItems.Count, 10);
 
-            foreach (IListItemDTO item in listItems)
+            foreach (var item in listItems)
             {
                 Assert.IsFalse((string.IsNullOrEmpty(item.ASIN)));
                 Debug.WriteLine(item.ASIN);
@@ -38,9 +37,9 @@ namespace AdamDotCom.Amazon.UnitTests
         {
             listMapper.GetList();
 
-            IList<string> errors = listMapper.GetErrors();
+            var errors = listMapper.GetErrors();
 
-            foreach (string error in errors)
+            foreach (var error in errors)
             {
                 Debug.WriteLine(error);
             }

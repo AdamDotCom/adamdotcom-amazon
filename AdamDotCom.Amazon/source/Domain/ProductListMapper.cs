@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AdamDotCom.Amazon.Domain.Extensions;
 using AdamDotCom.Amazon.Domain.Interfaces;
 using AdamDotCom.Amazon.WebServiceTranslator;
@@ -18,29 +19,36 @@ namespace AdamDotCom.Amazon.Domain
             this.amazonRequest = amazonRequest;
             errors = new List<string>();
 
-            ListMapper listMapper = new ListMapper(amazonRequest.AWSAccessKeyId, amazonRequest.AssociateTag, amazonRequest.ListId);
-
-            using(listMapper)
+            try
             {
-                listItems = listMapper.GetList();
+                var listMapper = new ListMapper(amazonRequest.AWSAccessKeyId, amazonRequest.AssociateTag, amazonRequest.ListId);
 
-                foreach (string error in listMapper.GetErrors())
+                using (listMapper)
                 {
-                    errors.Add(error);
+                    listItems = listMapper.GetList();
+
+                    foreach (string error in listMapper.GetErrors())
+                    {
+                        errors.Add(error);
+                    }
+
                 }
 
+                var productMapper = new ProductMapper(amazonRequest.AWSAccessKeyId, amazonRequest.AssociateTag);
+
+                using (productMapper)
+                {
+                    products = productMapper.GetProducts(listItems.ConvertAll(listItem => listItem.ASIN));
+
+                    foreach (string error in productMapper.GetErrors())
+                    {
+                        errors.Add(error);
+                    }
+                }
             }
-
-            ProductMapper productMapper = new ProductMapper(amazonRequest.AWSAccessKeyId, amazonRequest.AssociateTag);
-
-            using (productMapper)
+            catch(Exception ex)
             {
-                products = productMapper.GetProducts(listItems.ConvertAll(listItem => listItem.ASIN));
-
-                foreach (string error in productMapper.GetErrors())
-                {
-                    errors.Add(error);
-                }
+                errors.Add(ex.Message);
             }
         }
 
@@ -56,17 +64,17 @@ namespace AdamDotCom.Amazon.Domain
 
         private Product MapProduct(IProductDTO product)
         {
-            Product productToReturn = new Product
-            {
-                ASIN = product.ASIN,
-                Authors = product.Authors(),
-                AuthorsMLA = product.AuthorsInMlaFormat(),
-                ImageUrl = product.ProductImageUrl(amazonRequest.AssociateTag),
-                ProductPreviewUrl = product.ProductPreviewUrl(amazonRequest.AssociateTag),
-                Publisher = product.Publisher,
-                Title = product.Title,
-                Url = product.Url
-            };
+            var productToReturn = new Product
+                                      {
+                                          ASIN = product.ASIN,
+                                          Authors = product.Authors(),
+                                          AuthorsMLA = product.AuthorsInMlaFormat(),
+                                          ImageUrl = product.ProductImageUrl(amazonRequest.AssociateTag),
+                                          ProductPreviewUrl = product.ProductPreviewUrl(amazonRequest.AssociateTag),
+                                          Publisher = product.Publisher,
+                                          Title = product.Title,
+                                          Url = product.Url
+                                      };
 
             return productToReturn;
         }

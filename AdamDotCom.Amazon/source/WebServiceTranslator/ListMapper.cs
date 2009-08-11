@@ -31,29 +31,34 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
 
         public virtual List<ListItemDTO> GetList()
         {
-            List<ListItemDTO> listItemsToReturn = new List<ListItemDTO>(); 
+            var listItemsToReturn = new List<ListItemDTO>(); 
             
-            ListLookupResponse listLookupResponse = new ListLookupResponse();
+            var listLookupResponse = new ListLookupResponse();
 
-            //Amazon Lists can return 300 items at 10 items per page
-            for(int currentPageRequest = 1 ; currentPageRequest <= 30 ; currentPageRequest++)
+            //Amazon Lists can return 300 items at 10 items per page and 
+            // I can't figure out how to find the total number of pages number in the Amazon Response
+            // so I'm using the max page requests just incase.
+            for (int currentPageRequest = 1; currentPageRequest <= 30; currentPageRequest++)
             {
 
-                ListLookupRequest listLookupRequest = new ListLookupRequest();
-                listLookupRequest.ListId = listId;
-                listLookupRequest.ListType = ListLookupRequestListType.WishList;
-                listLookupRequest.ListTypeSpecified = true;
-                listLookupRequest.ProductGroup = "Book";
-                listLookupRequest.ResponseGroup = new[] { "ItemIds", "Small" };
-
-                listLookupRequest.ProductPage = currentPageRequest.ToString();
+                var listLookupRequest = new ListLookupRequest
+                                            {
+                                                ListId = listId,
+                                                ListType = ListLookupRequestListType.WishList,
+                                                ListTypeSpecified = true,
+                                                ProductGroup = "Book",
+                                                ResponseGroup = new[] {"ItemIds", "Small"},
+                                                ProductPage = currentPageRequest.ToString()
+                                            };
 
                 var requests = new[] { listLookupRequest };
 
-                ListLookup listLookup = new ListLookup();
-                listLookup.AWSAccessKeyId = awsAccessKeyId;
-                listLookup.AssociateTag = associateTag;
-                listLookup.Request = requests;
+                var listLookup = new ListLookup
+                                     {
+                                         AWSAccessKeyId = awsAccessKeyId,
+                                         AssociateTag = associateTag,
+                                         Request = requests
+                                     };
 
                 using (awseCommerceService)
                 {
@@ -66,25 +71,18 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
                     {
                         MapErrors(listLookupResponse.OperationRequest.Errors);
                     }
-                    else if (listLookupResponse.Lists[0].Request.Errors != null)
-                    {
-                        MapErrors(listLookupResponse.Lists[0].Request.Errors);
-                    }
                     break;
-                }              
-
-                foreach (ListItemDTO wishListItem in MapListItems(listLookupResponse.Lists[0].List[0].ListItem))
-                {
-                    listItemsToReturn.Add(wishListItem);
                 }
+
+                listItemsToReturn.AddRange(MapListItems(listLookupResponse.Lists[0].List[0].ListItem));
             }
 
             return listItemsToReturn;
         }
 
-        private IListItemDTO MapListItem(Item listItem)
+        private static ListItemDTO MapListItem(Item listItem)
         {
-            IListItemDTO listItemToReturn = new ListItemDTO()
+            var listItemToReturn = new ListItemDTO()
             {
                 ASIN = listItem.ASIN 
             };
@@ -92,21 +90,19 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
             return listItemToReturn;
         }
 
-        private List<IListItemDTO> MapListItems(ListItem[] listItems)
+        private static List<ListItemDTO> MapListItems(IEnumerable<ListItem> listItems)
         {
-            List<IListItemDTO> listItemsToReturn = new List<IListItemDTO>();
+            var listItemsToReturn = new List<ListItemDTO>();
 
             foreach (ListItem listItem in listItems)
             {
-                IListItemDTO listItemToReturn = MapListItem(listItem.Item);
-
-                listItemsToReturn.Add(listItemToReturn);
+                listItemsToReturn.Add(MapListItem(listItem.Item));
             }
 
             return listItemsToReturn;
         }
 
-        private void MapErrors(ErrorsError[] listErrors)
+        private void MapErrors(IEnumerable<ErrorsError> listErrors)
         {
             foreach (ErrorsError error in listErrors)
             {

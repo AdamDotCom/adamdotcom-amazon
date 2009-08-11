@@ -17,34 +17,34 @@ namespace AdamDotCom.Amazon.UnitTests
         {
             productMapper = new ProductMapper("1MRFMGASE6CQKS2WTMR2", "adamkahtavaap-20");
 
-            ASINList = new List<string>()
-            {
-                "1556159005",
-                "0201485672",
-                "0471137723",
-                "0132624788",
-                "0471467413",
-                "0735618798",
-                "1886411972",
-                "0131495054",
-                "0673386023",
-                "1883577039",
-                "0262560992",
-                "026256100X",
-                "0262562146"
-            };
+            ASINList = new List<string>
+                           {
+                               "1556159005",
+                               "0201485672",
+                               "0471137723",
+                               "0132624788",
+                               "0471467413",
+                               "0735618798",
+                               "1886411972",
+                               "0131495054",
+                               "0673386023",
+                               "1883577039",
+                               "0262560992",
+                               "026256100X",
+                               "0262562146"
+                           };
         }
 
         [Test]
         public void ShouldBeAbleToGetProductsFromAmazon()
         {
-            IList<ProductDTO> products = productMapper.GetProducts(ASINList);
+            var products = productMapper.GetProducts(ASINList);
 
             Assert.AreEqual(ASINList.Count, products.Count);
 
             Debug.WriteLine(products.Count);
 
-            foreach (IProductDTO product in products)
+            foreach (var product in products)
             {
                 Assert.IsFalse((string.IsNullOrEmpty(product.ASIN)));
                 Assert.IsNotNull(product.Authors);
@@ -61,9 +61,9 @@ namespace AdamDotCom.Amazon.UnitTests
         {
             productMapper.GetProducts(ASINList);
 
-            IList<string> errors = productMapper.GetErrors();
+            var errors = productMapper.GetErrors();
 
-            foreach (string error in errors)
+            foreach (var error in errors)
             {
                 Debug.WriteLine(error);
             }
