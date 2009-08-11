@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
-using AdamDotCom.Amazon.Application;
 using AdamDotCom.Amazon.Domain;
 using AdamDotCom.Amazon.Domain.Interfaces;
 using AdamDotCom.Amazon.WebServiceTranslator;
@@ -13,38 +12,31 @@ namespace AdamDotCom.Amazon.UnitTests
     {
         IReviewListMapper reviewMapper;
 
-        [TestFixtureSetUp]
-        protected void SetUp()
-        {
-        }
-
         [Test]
         public void ShouldMapFakeDTOsTogether()
         {
-            List<ProductDTO> productDTOs = new List<ProductDTO>();
+            var productDTOs = new List<ProductDTO>();
 
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                ProductDTO productDTO = new ProductDTO();
-                productDTO.ASIN = i.ToString();
+                var productDTO = new ProductDTO {ASIN = i.ToString()};
 
                 productDTOs.Add(productDTO);
             }
 
-            List<ReviewDTO> reviewDTOs = new List<ReviewDTO>();
+            var reviewDTOs = new List<ReviewDTO>();
             for (int i = 5; i < 15; i++)
             {
-                ReviewDTO reviewDTO = new ReviewDTO();
-                reviewDTO.ASIN = i.ToString();
+                var reviewDTO = new ReviewDTO {ASIN = i.ToString()};
 
                 reviewDTOs.Add(reviewDTO);
             }
 
-            IAmazonRequest amazonRequest = new AmazonRequest();
+            var amazonRequest = new AmazonRequest();
 
             reviewMapper = new ReviewListMapper(amazonRequest, reviewDTOs, productDTOs);
 
-            IList<Review> reviews = reviewMapper.GetReviewList();
+            var reviews = reviewMapper.GetReviewList();
 
             Assert.AreNotEqual(0, reviews.Count);
             Debug.WriteLine(reviews.Count);
@@ -53,14 +45,16 @@ namespace AdamDotCom.Amazon.UnitTests
         [Test]
         public void ShouldMapRealAmazonDataTogether()
         {
-            IAmazonRequest amazonRequest = new AmazonRequest();
-            amazonRequest.AssociateTag = "adamkahtavaap-20";
-            amazonRequest.AWSAccessKeyId = "1MRFMGASE6CQKS2WTMR2";
-            amazonRequest.CustomerId = "A2JM0EQJELFL69";
+            var amazonRequest = new AmazonRequest
+                                    {
+                                        AssociateTag = "adamkahtavaap-20",
+                                        AWSAccessKeyId = "1MRFMGASE6CQKS2WTMR2",
+                                        CustomerId = "A2JM0EQJELFL69"
+                                    };
 
             reviewMapper = new ReviewListMapper(amazonRequest);
 
-            IList<Review> reviews = reviewMapper.GetReviewList();
+            var reviews = reviewMapper.GetReviewList();
 
             Assert.AreNotEqual(0, reviews.Count);
 

@@ -7,12 +7,7 @@ namespace AdamDotCom.Amazon.UnitTests
 {
     [TestFixture]
     public class FormatHelperTest
-    {
-        [TestFixtureSetUp]
-        protected void SetUp()
-        {
-        }
-
+    {      
         [Test]
         public void ShouldSortNames()
         {
@@ -35,7 +30,7 @@ namespace AdamDotCom.Amazon.UnitTests
         {
             string[] authors = {"Martin Fowler", "Kent Beck", "John Brant", "William Opdyke", "Don Roberts"};
 
-            string authorsInMLA = new ProductDTO {Authors = authors}.AuthorsInMlaFormat();
+            var authorsInMLA = new ProductDTO {Authors = authors}.AuthorsInMlaFormat();
 
             Assert.IsFalse(string.IsNullOrEmpty(authorsInMLA));
             Assert.AreEqual("Fowler Martin, et al.", authorsInMLA);
@@ -59,12 +54,11 @@ namespace AdamDotCom.Amazon.UnitTests
         {
             string[] authors = { "Martin Fowler", "Kent Beck", "John Brant", "William Opdyke", "Don Roberts" };
 
-            string authorsFlattened = new ProductDTO() {Authors = authors}.Authors();
+            string authorsFlattened = new ProductDTO {Authors = authors}.Authors();
 
             Assert.IsFalse(string.IsNullOrEmpty(authorsFlattened));
             Assert.AreEqual("Martin Fowler, Kent Beck, John Brant, William Opdyke, Don Roberts", authorsFlattened);
             Debug.WriteLine(authorsFlattened);
         }
-    
     }
 }

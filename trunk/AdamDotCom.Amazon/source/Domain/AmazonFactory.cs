@@ -29,8 +29,7 @@ namespace AdamDotCom.Amazon.Domain
 
         public AmazonResponse GetResponse()
         {
-            var amazonResponse = new AmazonResponse();
-            amazonResponse.Errors = new List<string>();
+            var amazonResponse = new AmazonResponse {Errors = new List<string>()};
 
             if(string.IsNullOrEmpty(amazonRequest.CustomerId) && string.IsNullOrEmpty(amazonRequest.ListId))
             {
@@ -39,16 +38,26 @@ namespace AdamDotCom.Amazon.Domain
 
             if (productListMapper != null)
             {
-                amazonResponse.Products = productListMapper.GetList();
-
-                amazonResponse.Errors.AddRange(productListMapper.GetErrors());
+                if (productListMapper.GetErrors().Count != 0)
+                {
+                    amazonResponse.Errors.AddRange(productListMapper.GetErrors());
+                }
+                else
+                {
+                    amazonResponse.Products = productListMapper.GetList();
+                }
             }
 
             if (reviewListMapper != null)
             {
-                amazonResponse.Reviews = reviewListMapper.GetReviewList();
-
-                amazonResponse.Errors.AddRange(reviewListMapper.GetErrors());
+                if (reviewListMapper.GetErrors().Count != 0)
+                {
+                    amazonResponse.Errors.AddRange(reviewListMapper.GetErrors());
+                }
+                else
+                {
+                    amazonResponse.Reviews = reviewListMapper.GetReviewList();
+                }
             }
 
             return amazonResponse;

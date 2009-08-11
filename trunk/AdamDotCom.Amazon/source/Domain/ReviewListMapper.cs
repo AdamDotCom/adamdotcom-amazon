@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AdamDotCom.Amazon.Domain.Extensions;
 using AdamDotCom.Amazon.Domain.Interfaces;
@@ -28,29 +29,36 @@ namespace AdamDotCom.Amazon.Domain
             this.amazonRequest = amazonRequest;
             errors = new List<string>();
 
-            ReviewMapper reviewMapper = new ReviewMapper(amazonRequest.AWSAccessKeyId, amazonRequest.AssociateTag, amazonRequest.CustomerId);
-
-            using (reviewMapper)
+            try
             {
-                reviews = reviewMapper.GetReviews();
+                var reviewMapper = new ReviewMapper(amazonRequest.AWSAccessKeyId, amazonRequest.AssociateTag, amazonRequest.CustomerId);
 
-                foreach (string error in reviewMapper.GetErrors())
+                using (reviewMapper)
                 {
-                    errors.Add(error);
+                    reviews = reviewMapper.GetReviews();
+
+                    foreach (var error in reviewMapper.GetErrors())
+                    {
+                        errors.Add(error);
+                    }
+
                 }
 
+                var productMapper = new ProductMapper(amazonRequest.AWSAccessKeyId, amazonRequest.AssociateTag);
+
+                using (productMapper)
+                {
+                    products = productMapper.GetProducts(reviews.ConvertAll(review => review.ASIN));
+
+                    foreach (var error in productMapper.GetErrors())
+                    {
+                        errors.Add(error);
+                    }
+                }
             }
-
-            ProductMapper productMapper = new ProductMapper(amazonRequest.AWSAccessKeyId, amazonRequest.AssociateTag);
-
-            using(productMapper)
+            catch(Exception ex)
             {
-                products = productMapper.GetProducts(reviews.ConvertAll(review => review.ASIN));
-
-                foreach (string error in productMapper.GetErrors())
-                {
-                    errors.Add(error);
-                }
+                errors.Add(ex.Message);
             }
         }
 
@@ -66,31 +74,30 @@ namespace AdamDotCom.Amazon.Domain
 
         private Review MapProductAndReview(IProductDTO product, IReviewDTO review)
         {
-            Review reviewToReturn = new Review()
-            {
-                ASIN = product.ASIN,
-                Authors = product.Authors(),
-                AuthorsMLA = product.AuthorsInMlaFormat(),
-                ImageUrl = product.ProductImageUrl(amazonRequest.AssociateTag),
-                ProductPreviewUrl = product.ProductPreviewUrl(amazonRequest.AssociateTag),
-                Publisher = product.Publisher,
-                Title = product.Title,
-                Url = product.Url,
-
-                Content = review.Content,
-                Date = review.Date,
-                HelpfulVotes = review.HelpfulVotes,
-                Rating = review.Rating,
-                Summary = review.Summary,
-                TotalVotes = review.TotalVotes
-            };
+            var reviewToReturn = new Review
+                                     {
+                                         ASIN = product.ASIN,
+                                         Authors = product.Authors(),
+                                         AuthorsMLA = product.AuthorsInMlaFormat(),
+                                         ImageUrl = product.ProductImageUrl(amazonRequest.AssociateTag),
+                                         ProductPreviewUrl = product.ProductPreviewUrl(amazonRequest.AssociateTag),
+                                         Publisher = product.Publisher,
+                                         Title = product.Title,
+                                         Url = product.Url,
+                                         Content = review.Content,
+                                         Date = review.Date,
+                                         HelpfulVotes = review.HelpfulVotes,
+                                         Rating = review.Rating,
+                                         Summary = review.Summary,
+                                         TotalVotes = review.TotalVotes
+                                     };
 
             return reviewToReturn;
         }
 
-        private List<Review> MapProductsAndReviews(IList<ProductDTO> products, IList<ReviewDTO> reviews)
+        private List<Review> MapProductsAndReviews(IEnumerable<ProductDTO> products, IEnumerable<ReviewDTO> reviews)
         {
-            IEnumerable<Review> results = from product in products
+            var results = from product in products
                                           join review in reviews on product.ASIN equals review.ASIN
                                           select MapProductAndReview(product, review);
 

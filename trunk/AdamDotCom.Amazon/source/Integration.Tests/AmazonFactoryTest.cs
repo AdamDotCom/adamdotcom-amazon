@@ -13,11 +13,13 @@ namespace AdamDotCom.Amazon.UnitTests
         [TestFixtureSetUp]
         protected void SetUp()
         {
-            amazonRequest = new AmazonRequest();
-            amazonRequest.AssociateTag = "adamkahtavaap-20";
-            amazonRequest.AWSAccessKeyId = "1MRFMGASE6CQKS2WTMR2";
-            amazonRequest.CustomerId = "A2JM0EQJELFL69";
-            amazonRequest.ListId = "3JU6ASKNUS7B8";
+            amazonRequest = new AmazonRequest
+                                {
+                                    AssociateTag = "adamkahtavaap-20",
+                                    AWSAccessKeyId = "1MRFMGASE6CQKS2WTMR2",
+                                    CustomerId = "A2JM0EQJELFL69",
+                                    ListId = "3JU6ASKNUS7B8"
+                                };
         }
 
         [Test]
@@ -28,10 +30,10 @@ namespace AdamDotCom.Amazon.UnitTests
             amazonRequest.CustomerId = "A2JM0EQJELFL69";
             amazonRequest.ListId = "3JU6ASKNUS7B8";
 
-            IAmazonResponse amazonResponse = new AmazonFactory(amazonRequest).GetResponse();
+            var amazonResponse = new AmazonFactory(amazonRequest).GetResponse();
 
-            string errors = string.Empty;
-            foreach (string error in amazonResponse.Errors)
+            var errors = string.Empty;
+            foreach (var error in amazonResponse.Errors)
             {
                 errors += error + " ";
             }
@@ -49,16 +51,16 @@ namespace AdamDotCom.Amazon.UnitTests
         [Test]
         public void ShouldInvokeAndReturnErrorsFromIncorrectCustomerIdAndListId()
         {
-            IAmazonRequest amazonRequestLocal = amazonRequest;
+            var amazonRequestLocal = amazonRequest;
 
             amazonRequestLocal.CustomerId = "injectingIncorrectData";
             amazonRequestLocal.ListId = "injectingIncorrectData2";
 
-            IAmazonResponse amazonResponse = new AmazonFactory(amazonRequestLocal).GetResponse();
+            var amazonResponse = new AmazonFactory(amazonRequestLocal).GetResponse();
 
             Assert.Greater(amazonResponse.Errors.Count, 0);
 
-            foreach (string error in amazonResponse.Errors)
+            foreach (var error in amazonResponse.Errors)
             {
                 Debug.WriteLine(error);
             }
@@ -68,14 +70,14 @@ namespace AdamDotCom.Amazon.UnitTests
         [Test]
         public void ShouldInvokeAndReturnErrorsFromIncorrectAWSAccessKeyId()
         {
-            IAmazonRequest amazonRequestLocal = amazonRequest;
+            var amazonRequestLocal = amazonRequest;
             amazonRequest.AWSAccessKeyId = "trash";
 
-            IAmazonResponse amazonResponse = new AmazonFactory(amazonRequestLocal).GetResponse();
+            var amazonResponse = new AmazonFactory(amazonRequestLocal).GetResponse();
 
             Assert.Greater(amazonResponse.Errors.Count, 0);
 
-            foreach (string error in amazonResponse.Errors)
+            foreach (var error in amazonResponse.Errors)
             {
                 Debug.WriteLine(error);
             }
@@ -84,17 +86,19 @@ namespace AdamDotCom.Amazon.UnitTests
         [Test]
         public void ShouldReturnErrorsBecauseListIdAndCustomerIdHaveNotBeenSpecified()
         {
-            IAmazonRequest amazonRequestLocal = new AmazonRequest();
-            amazonRequestLocal.AssociateTag = "adamkahtavaap-20";
-            amazonRequestLocal.AWSAccessKeyId = "1MRFMGASE6CQKS2WTMR2";
-            amazonRequestLocal.CustomerId = string.Empty;
-            amazonRequestLocal.ListId = string.Empty;
+            var amazonRequestLocal = new AmazonRequest
+                                         {
+                                             AssociateTag = "adamkahtavaap-20",
+                                             AWSAccessKeyId = "1MRFMGASE6CQKS2WTMR2",
+                                             CustomerId = string.Empty,
+                                             ListId = string.Empty
+                                         };
 
-            IAmazonResponse amazonResponse = new AmazonFactory(amazonRequestLocal).GetResponse();
+            var amazonResponse = new AmazonFactory(amazonRequestLocal).GetResponse();
 
             Assert.Greater(amazonResponse.Errors.Count, 0);
 
-            foreach (string error in amazonResponse.Errors)
+            foreach (var error in amazonResponse.Errors)
             {
                 if(error.Contains("CustomerId"))
                 {
@@ -103,6 +107,5 @@ namespace AdamDotCom.Amazon.UnitTests
                 Debug.WriteLine(error);
             }
         }
-
     }
 }

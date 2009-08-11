@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using AdamDotCom.Amazon.WebServiceTranslator;
 using AdamDotCom.Amazon.WebServiceTranslator.Interfaces;
 using NUnit.Framework;
@@ -20,13 +19,13 @@ namespace AdamDotCom.Amazon.UnitTests
         [Test]
         public void ShouldBeAbleToGetReviewsFromAmazon()
         {
-            IList<ReviewDTO> reviews = reviewMapper.GetReviews();
+            var reviews = reviewMapper.GetReviews();
 
             Assert.AreNotEqual(0, reviews.Count);
 
             Assert.Greater(reviews.Count, 10);
 
-            foreach (IReviewDTO review in reviews)
+            foreach (var review in reviews)
             {
                 Assert.IsFalse((string.IsNullOrEmpty(review.ASIN)));
                 Debug.WriteLine(review.ASIN);
@@ -38,15 +37,14 @@ namespace AdamDotCom.Amazon.UnitTests
         {
             reviewMapper.GetReviews();
 
-            IList<string> errors = reviewMapper.GetErrors();
+            var errors = reviewMapper.GetErrors();
 
-            foreach (string error in errors)
+            foreach (var error in errors)
             {
                 Debug.WriteLine(error);
             }
 
             Assert.AreEqual(0, errors.Count);
         }
-
     }
 }
