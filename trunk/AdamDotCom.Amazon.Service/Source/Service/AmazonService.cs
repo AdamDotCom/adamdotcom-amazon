@@ -1,39 +1,59 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
-using System.Runtime.Serialization;
-using System.ServiceModel;
-using System.ServiceModel.Web;
-using System.Text;
-using System.Web;
 using AdamDotCom.Amazon.Domain;
-using Microsoft.ServiceModel.Web;
+using AdamDotCom.Amazon.Domain.Interfaces;
+using AdamDotCom.Amazon.Service.Utilities;
 
 namespace AdamDotCom.Amazon.Service
 {
     public class AmazonService : IAmazon
     {
-        public AmazonResponse Reviews(string customerId)
+        public Reviews ReviewsXml(string customerId)
         {
-            throw new RestException(HttpStatusCode.Unauthorized, new List<string> {"wrong name"});
-
-            OutgoingWebResponseContext outResponse = WebOperationContext.Current.OutgoingResponse;
-            outResponse.StatusCode = HttpStatusCode.BadRequest;
-            outResponse.StatusDescription = "hey";
-            return null;
-            var amazonResponse = new AmazonFactory(BuildRequest(customerId, null)).GetResponse();
-
-            if (amazonResponse.Errors != null && amazonResponse.Errors.Count!=0)
-            {
-                throw new WebProtocolException(HttpStatusCode.BadRequest, "hey", null);
-            }
-
-            return amazonResponse;
+            return Reviews(customerId);
         }
 
-        public AmazonResponse Wishlist(string listId)
+        public Reviews ReviewsJson(string customerId)
         {
-            return new AmazonFactory(BuildRequest(null, listId)).GetResponse();
+            return Reviews(customerId);
+        }
+
+        public Wishlist WishlistXml(string listId)
+        {
+            return Wishlist(listId);
+        }
+
+        public Wishlist WishlistJson(string listId)
+        {
+            return Wishlist(listId);
+        }
+
+        public AmazonResponse DiscoverUserNameXml(string username)
+        {
+            throw new NotImplementedException();
+        }
+
+        public AmazonResponse DiscoverUserNameJson(string username)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static Reviews Reviews(string customerId)
+        {
+            AmazonResponse amazonResponse = new AmazonFactory(BuildRequest(customerId, null)).GetResponse();
+
+            HandleErrors(amazonResponse);
+
+            return new Reviews(amazonResponse.Reviews);
+        }
+
+        private static Wishlist Wishlist(string listId)
+        {
+            AmazonResponse amazonResponse = new AmazonFactory(BuildRequest(null, listId)).GetResponse();
+
+            HandleErrors(amazonResponse);
+
+            return new Wishlist(amazonResponse.Products);
         }
 
         private static AmazonRequest BuildRequest(string customerId, string listId)
@@ -46,20 +66,13 @@ namespace AdamDotCom.Amazon.Service
                            ListId = listId
                        };
         }
-    }
 
-    internal class RestException : Exception
-    {
-        public RestException(HttpStatusCode httpStatusCode, List<string> errorList)
+        private static void HandleErrors(IAmazonResponse amazonResponse)
         {
-            var exception = new HttpException((int) httpStatusCode, "Error", 10);
-            
-            foreach (var item in errorList)
+            if (amazonResponse.Errors != null && amazonResponse.Errors.Count != 0)
             {
-                exception.Data.Add("key",item);
+                throw new RestException(HttpStatusCode.BadRequest, amazonResponse.Errors);
             }
-
-            throw exception;
         }
     }
 }

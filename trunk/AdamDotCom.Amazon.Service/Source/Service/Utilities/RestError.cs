@@ -19,7 +19,7 @@ namespace AdamDotCom.Amazon.Service.Utilities
                 Errors.Add((string) item.Key, (string) item.Value);
             }
 
-            Description = string.Format("An error {0} occured with a HttpStatusCode {1}.", httpStatusCode, errorCode);
+            Description = string.Format("An error {0} occured with a HttpStatusCode {1}.", errorCode, httpStatusCode);
         }
 
         [DataMember] public IDictionary<string, string> Errors;
