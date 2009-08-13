@@ -26,12 +26,19 @@ namespace AdamDotCom.Amazon.Service.Utilities
 
             public void ProvideFault(Exception exception, MessageVersion version, ref Message fault)
             {
-                var httpException = (HttpException) exception;
+                if (exception.GetType() == typeof(HttpException))
+                {
+                    var httpException = (HttpException)exception;
 
-                fault = Message.CreateMessage(version, null, new RestError(httpException.Data, httpException.GetHttpCode(), 10));
+                    fault = Message.CreateMessage(version, null, new RestError(httpException.Data, httpException.GetHttpCode(), 10));
 
-                OutgoingWebResponseContext outResponse = WebOperationContext.Current.OutgoingResponse;
-                outResponse.StatusCode = (HttpStatusCode)httpException.GetHttpCode();
+                    OutgoingWebResponseContext outResponse = WebOperationContext.Current.OutgoingResponse;
+                    outResponse.StatusCode = (HttpStatusCode)httpException.GetHttpCode();
+                }
+                else
+                {
+                    throw new RestException();
+                }
             }
         }
     }

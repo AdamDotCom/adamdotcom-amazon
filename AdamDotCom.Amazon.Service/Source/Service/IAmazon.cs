@@ -11,10 +11,26 @@ namespace AdamDotCom.Amazon.Service
     {
         [OperationContract]
         [WebGet(UriTemplate = "reviews/{customerId}/xml")]
-        AmazonResponse Reviews(string customerId);
+        Reviews ReviewsXml(string customerId);
+
+        [OperationContract]
+        [WebGet(UriTemplate = "reviews/{customerId}/json", ResponseFormat = WebMessageFormat.Json)]
+        Reviews ReviewsJson(string customerId);
 
         [OperationContract]
         [WebGet(UriTemplate = "wishlist/{listId}/xml")]
-        AmazonResponse Wishlist(string listId);
+        Wishlist WishlistXml(string listId);
+
+        [OperationContract]
+        [WebGet(UriTemplate = "wishlist/{listId}/json", ResponseFormat = WebMessageFormat.Json)]
+        Wishlist WishlistJson(string listId);
+
+        [OperationContract]
+        [WebGet(UriTemplate = "discover/{username}/xml")]
+        AmazonResponse DiscoverUserNameXml(string username);
+
+        [OperationContract]
+        [WebGet(UriTemplate = "discover/{username}/json", ResponseFormat = WebMessageFormat.Json)]
+        AmazonResponse DiscoverUserNameJson(string username);
     }
 }
