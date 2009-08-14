@@ -11,9 +11,8 @@ namespace AdamDotCom.Amazon.Service
         {
         }
 
-        public Wishlist(IEnumerable<Product> wishlist)
+        public Wishlist(IEnumerable<Product> wishlist) : base(wishlist)
         {
-            AddRange(wishlist);
         }
     }
 }
