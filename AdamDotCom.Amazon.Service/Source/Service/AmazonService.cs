@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.ServiceModel.Web;
 using AdamDotCom.Amazon.Domain;
 using AdamDotCom.Amazon.Domain.Interfaces;
 using AdamDotCom.Amazon.Service.Utilities;

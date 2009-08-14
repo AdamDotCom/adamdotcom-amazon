@@ -60,7 +60,7 @@
   <ItemGroup>
     <Compile Include="AmazonService.cs" />
     <Compile Include="Reviews.cs" />
-    <Compile Include="Utilities\RestError.cs" />
+    <Compile Include="RestError.cs" />
     <Compile Include="Utilities\RestException.cs" />
     <Compile Include="Utilities\WebHttpWithExceptions.cs" />
     <Compile Include="Utilities\WebHttpWithExceptionsElement.cs" />

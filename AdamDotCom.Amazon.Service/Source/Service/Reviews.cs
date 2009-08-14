@@ -11,9 +11,8 @@ namespace AdamDotCom.Amazon.Service
         {
         }
 
-        public Reviews(IEnumerable<Review> reviews)
+        public Reviews(IEnumerable<Review> reviews) : base(reviews)
         {
-            AddRange(reviews);
         }
     }
 }
