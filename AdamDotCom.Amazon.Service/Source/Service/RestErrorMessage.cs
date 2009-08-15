@@ -5,13 +5,13 @@ using System.Runtime.Serialization;
 namespace AdamDotCom.Amazon.Service
 {
     [DataContract]
-    public class RestError
+    public class RestErrorMessage
     {
-        public RestError()
+        public RestErrorMessage()
         {
         }
 
-        public RestError(IDictionary dictionary, int httpStatusCode, int errorCode)
+        public RestErrorMessage(IDictionary dictionary, int httpStatusCode, int errorCode)
         {
             Errors = new Errors();
             foreach (DictionaryEntry item in dictionary)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.ServiceModel.Web;
 using AdamDotCom.Amazon.Domain;
@@ -29,12 +30,12 @@ namespace AdamDotCom.Amazon.Service
             return Wishlist(listId);
         }
 
-        public AmazonResponse DiscoverUserNameXml(string username)
+        public AmazonResponse DiscoverUserXml(string username)
         {
             throw new NotImplementedException();
         }
 
-        public AmazonResponse DiscoverUserNameJson(string username)
+        public AmazonResponse DiscoverUserJson(string username)
         {
             throw new NotImplementedException();
         }
@@ -45,7 +46,7 @@ namespace AdamDotCom.Amazon.Service
 
             HandleErrors(amazonResponse);
 
-            return new Reviews(amazonResponse.Reviews);
+            return new Reviews(amazonResponse.Reviews.OrderByDescending(r => r.Date));
         }
 
         private static Wishlist Wishlist(string listId)
@@ -54,7 +55,7 @@ namespace AdamDotCom.Amazon.Service
 
             HandleErrors(amazonResponse);
 
-            return new Wishlist(amazonResponse.Products);
+            return new Wishlist(amazonResponse.Products.OrderBy(p => p.AuthorsMLA).ThenBy(p => p.Title));
         }
 
         private static AmazonRequest BuildRequest(string customerId, string listId)

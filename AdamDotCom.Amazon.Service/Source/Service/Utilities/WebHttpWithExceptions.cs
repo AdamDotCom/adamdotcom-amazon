@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
+using System.Runtime.Serialization.Json;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
@@ -10,18 +12,44 @@ namespace AdamDotCom.Amazon.Service.Utilities
 {
     public class WebHttpWithExceptions : WebHttpBehavior
     {
+        private static List<WebGetAttribute> webGetAttributes;
+
+        static WebHttpWithExceptions()
+        {
+            webGetAttributes = new List<WebGetAttribute>();
+        }
+
+        protected override IDispatchMessageFormatter GetReplyDispatchFormatter(OperationDescription operationDescription, ServiceEndpoint endpoint)
+        {
+            var webGetAttribute = operationDescription.Behaviors.Find<WebGetAttribute>();
+            webGetAttributes.Add(webGetAttribute);
+
+            return base.GetReplyDispatchFormatter(operationDescription, endpoint);
+        }
+
         protected override void AddServerErrorHandlers(ServiceEndpoint endpoint, EndpointDispatcher endpointDispatcher)
         {
             endpointDispatcher.ChannelDispatcher.ErrorHandlers.Clear();
 
-            endpointDispatcher.ChannelDispatcher.ErrorHandlers.Add(new ErrorHandler());
+            endpointDispatcher.ChannelDispatcher.ErrorHandlers.Add(new ErrorHandler(webGetAttributes));
         }
 
         public class ErrorHandler : IErrorHandler
         {
+            private readonly List<WebGetAttribute> webGetAttributes;
+
+            public ErrorHandler()
+            {
+            }
+
+            public ErrorHandler(List<WebGetAttribute> webGetAttributes)
+            {
+                this.webGetAttributes = webGetAttributes;
+            }
+
             public bool HandleError(Exception error)
             {
-                return true;
+                return false;
             }
 
             public void ProvideFault(Exception exception, MessageVersion version, ref Message fault)
@@ -30,15 +58,50 @@ namespace AdamDotCom.Amazon.Service.Utilities
                 {
                     var httpException = (HttpException)exception;
 
-                    fault = Message.CreateMessage(version, null, new RestError(httpException.Data, httpException.GetHttpCode(), 10));
+                    var inResponse = WebOperationContext.Current.IncomingRequest;
 
-                    OutgoingWebResponseContext outResponse = WebOperationContext.Current.OutgoingResponse;
+                    var webGetAttribute = GetCurrentAttribute(inResponse);
+
+                    if(webGetAttribute == null)
+                    {
+                        throw new RestException();    
+                    }
+
+                    var restErrorMessage = new RestErrorMessage(httpException.Data, httpException.GetHttpCode(), httpException.ErrorCode);
+                    fault = CreateMessage(restErrorMessage, version, webGetAttribute.ResponseFormat);
+                    fault.Properties.Add(WebBodyFormatMessageProperty.Name, GetBodyFormat(webGetAttribute.ResponseFormat));
+
+                    var outResponse = WebOperationContext.Current.OutgoingResponse;
                     outResponse.StatusCode = (HttpStatusCode)httpException.GetHttpCode();
+                    outResponse.ContentType = Enum.Parse(typeof(WebMessageFormat),webGetAttribute.RequestFormat.ToString()).ToString();
                 }
                 else
                 {
                     throw new RestException();
                 }
+            }
+
+            private static WebBodyFormatMessageProperty GetBodyFormat(WebMessageFormat webMessageFormat)
+            {
+                return new WebBodyFormatMessageProperty((WebContentFormat) Enum.Parse(typeof(WebContentFormat), webMessageFormat.ToString()));
+            }
+
+            private static Message CreateMessage(RestErrorMessage restErrorMessage, MessageVersion version, WebMessageFormat webMessageFormat)
+            {
+                if (webMessageFormat == WebMessageFormat.Json)
+                {
+                    return Message.CreateMessage(version, null, restErrorMessage, new DataContractJsonSerializer(restErrorMessage.GetType()));
+                }
+                if (webMessageFormat == WebMessageFormat.Xml)
+                {
+                    return Message.CreateMessage(version, null, restErrorMessage);
+                }                
+                return null;
+            }
+
+            private WebGetAttribute GetCurrentAttribute(IncomingWebRequestContext inResponse)
+            {
+                return webGetAttributes.Find(a => a.UriTemplate == inResponse.UriTemplateMatch.Template.ToString());
             }
         }
     }
