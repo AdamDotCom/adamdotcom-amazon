@@ -27,10 +27,10 @@ namespace AdamDotCom.Amazon.Service
 
         [OperationContract]
         [WebGet(UriTemplate = "discover/{username}/xml")]
-        AmazonResponse DiscoverUserNameXml(string username);
+        AmazonResponse DiscoverUserXml(string username);
 
         [OperationContract]
         [WebGet(UriTemplate = "discover/{username}/json", ResponseFormat = WebMessageFormat.Json)]
-        AmazonResponse DiscoverUserNameJson(string username);
+        AmazonResponse DiscoverUserJson(string username);
     }
 }

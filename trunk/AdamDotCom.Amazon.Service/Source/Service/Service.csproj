@@ -55,12 +55,15 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AmazonService.cs" />
     <Compile Include="Reviews.cs" />
-    <Compile Include="RestError.cs" />
+    <Compile Include="RestErrorMessage.cs" />
     <Compile Include="Utilities\RestException.cs" />
     <Compile Include="Utilities\WebHttpWithExceptions.cs" />
     <Compile Include="Utilities\WebHttpWithExceptionsElement.cs" />
