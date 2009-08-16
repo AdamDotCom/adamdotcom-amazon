@@ -29,18 +29,21 @@ namespace AdamDotCom.Amazon.Domain
 
         public AmazonResponse GetResponse()
         {
-            var amazonResponse = new AmazonResponse {Errors = new List<string>()};
+            var amazonResponse = new AmazonResponse {Errors = new List<KeyValuePair<string, string>>()};
 
             if(string.IsNullOrEmpty(amazonRequest.CustomerId) && string.IsNullOrEmpty(amazonRequest.ListId))
             {
-                amazonResponse.Errors.Add("A CustomerId or a ListId must be specified.");
+                amazonResponse.Errors.Add(new KeyValuePair<string, string>("CustomerId", "A CustomerId or a ListId must be specified."));
             }
 
             if (productListMapper != null)
             {
                 if (productListMapper.GetErrors().Count != 0)
                 {
-                    amazonResponse.Errors.AddRange(productListMapper.GetErrors());
+                    foreach (var item in productListMapper.GetErrors())
+                    {
+                        amazonResponse.Errors.Add(item);
+                    }
                 }
                 else
                 {
@@ -52,7 +55,10 @@ namespace AdamDotCom.Amazon.Domain
             {
                 if (reviewListMapper.GetErrors().Count != 0)
                 {
-                    amazonResponse.Errors.AddRange(reviewListMapper.GetErrors());
+                    foreach (var item in reviewListMapper.GetErrors())
+                    {
+                        amazonResponse.Errors.Add(item);
+                    }
                 }
                 else
                 {

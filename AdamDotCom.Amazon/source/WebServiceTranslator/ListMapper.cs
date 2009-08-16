@@ -11,7 +11,7 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
         private string listId;
         private string awsAccessKeyId;
         private string associateTag;
-        private List<string> errors;
+        private IList<KeyValuePair<string, string>> errors;
         private AWSECommerceService awseCommerceService;
 
         public ListMapper(string awsAccessKeyId, string associateTag, string listId)
@@ -21,10 +21,10 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
             this.awsAccessKeyId = awsAccessKeyId;
             this.associateTag = associateTag;
 
-            errors = new List<string>();
+            errors = new List<KeyValuePair<string, string>>();
         }
 
-        public virtual List<string> GetErrors()
+        public virtual IList<KeyValuePair<string, string>> GetErrors()
         {
             return errors;
         }
@@ -106,7 +106,7 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
         {
             foreach (ErrorsError error in listErrors)
             {
-                errors.Add(error.Code + " " + error.Message);
+                errors.Add(new KeyValuePair<string, string>(error.Code, error.Message));
             }
         }
 

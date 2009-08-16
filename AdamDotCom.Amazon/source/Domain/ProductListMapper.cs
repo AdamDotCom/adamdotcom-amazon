@@ -12,12 +12,12 @@ namespace AdamDotCom.Amazon.Domain
         private IAmazonRequest amazonRequest;
         private List<ListItemDTO> listItems;
         private List<ProductDTO> products;
-        private List<string> errors;
+        private IList<KeyValuePair<string, string>> errors;
 
         public ProductListMapper(IAmazonRequest amazonRequest)
         {
             this.amazonRequest = amazonRequest;
-            errors = new List<string>();
+            errors = new List<KeyValuePair<string, string>>();
 
             try
             {
@@ -27,7 +27,7 @@ namespace AdamDotCom.Amazon.Domain
                 {
                     listItems = listMapper.GetList();
 
-                    foreach (string error in listMapper.GetErrors())
+                    foreach (var error in listMapper.GetErrors())
                     {
                         errors.Add(error);
                     }
@@ -40,7 +40,7 @@ namespace AdamDotCom.Amazon.Domain
                 {
                     products = productMapper.GetProducts(listItems.ConvertAll(listItem => listItem.ASIN));
 
-                    foreach (string error in productMapper.GetErrors())
+                    foreach (var error in productMapper.GetErrors())
                     {
                         errors.Add(error);
                     }
@@ -48,7 +48,7 @@ namespace AdamDotCom.Amazon.Domain
             }
             catch(Exception ex)
             {
-                errors.Add(ex.Message);
+                errors.Add(new KeyValuePair<string, string>("Unknown", ex.Message));
             }
         }
 
@@ -57,7 +57,7 @@ namespace AdamDotCom.Amazon.Domain
             return MapProducts(products);
         }
 
-        public virtual List<string> GetErrors()
+        public virtual IList<KeyValuePair<string, string>> GetErrors()
         {
             return errors;
         }

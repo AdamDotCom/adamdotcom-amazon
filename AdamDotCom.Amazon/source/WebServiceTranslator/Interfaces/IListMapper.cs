@@ -6,6 +6,6 @@ namespace AdamDotCom.Amazon.WebServiceTranslator.Interfaces
     {
         List<ListItemDTO> GetList();
         
-        List<string> GetErrors();
+        IList<KeyValuePair<string, string>> GetErrors();
     }
 }
