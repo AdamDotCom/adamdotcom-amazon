@@ -61,19 +61,21 @@ namespace AdamDotCom.Amazon.Service.Utilities
                     var inResponse = WebOperationContext.Current.IncomingRequest;
 
                     var webGetAttribute = GetCurrentAttribute(inResponse);
-
+                    
                     if(webGetAttribute == null)
                     {
                         throw new RestException();    
                     }
 
+                    var currentResponseFormat = webGetAttribute.ResponseFormat;
+
                     var restErrorMessage = new RestErrorMessage(httpException.Data, httpException.GetHttpCode(), httpException.ErrorCode);
-                    fault = CreateMessage(restErrorMessage, version, webGetAttribute.ResponseFormat);
-                    fault.Properties.Add(WebBodyFormatMessageProperty.Name, GetBodyFormat(webGetAttribute.ResponseFormat));
+                    fault = CreateMessage(restErrorMessage, version, currentResponseFormat);
+                    fault.Properties.Add(WebBodyFormatMessageProperty.Name, GetBodyFormat(currentResponseFormat));
 
                     var outResponse = WebOperationContext.Current.OutgoingResponse;
                     outResponse.StatusCode = (HttpStatusCode)httpException.GetHttpCode();
-                    outResponse.ContentType = Enum.Parse(typeof(WebMessageFormat),webGetAttribute.RequestFormat.ToString()).ToString();
+                    outResponse.ContentType = string.Format("application/{0}", currentResponseFormat);
                 }
                 else
                 {
