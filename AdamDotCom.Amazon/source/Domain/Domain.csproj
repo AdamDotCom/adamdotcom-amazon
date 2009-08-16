@@ -54,6 +54,7 @@
     <Compile Include="AmazonRequest.cs" />
     <Compile Include="AmazonResponse.cs" />
     <Compile Include="Extensions\AmazonAssetHelper.cs" />
+    <Compile Include="Extensions\AmazonErrorTranslator.cs" />
     <Compile Include="Extensions\FormatHelper.cs" />
     <Compile Include="Interfaces\IAmazonFactory.cs" />
     <Compile Include="Interfaces\IAmazonRequest.cs" />
