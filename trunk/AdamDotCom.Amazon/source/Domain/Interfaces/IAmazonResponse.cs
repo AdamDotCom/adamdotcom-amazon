@@ -6,6 +6,6 @@ namespace AdamDotCom.Amazon.Domain.Interfaces
     {
         List<Review> Reviews { get; set; }
         List<Product> Products { get; set; }
-        List<string> Errors { get; set; }
+        List<KeyValuePair<string, string>> Errors { get; set; }
     }
 }

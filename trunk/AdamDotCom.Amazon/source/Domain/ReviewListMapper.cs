@@ -13,7 +13,7 @@ namespace AdamDotCom.Amazon.Domain
         private IAmazonRequest amazonRequest;
         private List<ReviewDTO> reviews;
         private List<ProductDTO> products;
-        private List<string> errors;
+        private IList<KeyValuePair<string, string>> errors;
 
         public ReviewListMapper(IAmazonRequest amazonRequest, List<ReviewDTO> reviews, List<ProductDTO> products)
         {
@@ -21,13 +21,13 @@ namespace AdamDotCom.Amazon.Domain
 
             this.reviews = reviews;
             this.products = products;
-            errors = new List<string>();
+            errors = new List<KeyValuePair<string, string>>();
         }
 
         public ReviewListMapper(IAmazonRequest amazonRequest)
         {
             this.amazonRequest = amazonRequest;
-            errors = new List<string>();
+            errors = new List<KeyValuePair<string, string>>();
 
             try
             {
@@ -58,7 +58,7 @@ namespace AdamDotCom.Amazon.Domain
             }
             catch(Exception ex)
             {
-                errors.Add(ex.Message);
+                errors.Add(new KeyValuePair<string, string>("Unknown", ex.Message));
             }
         }
 
@@ -67,7 +67,7 @@ namespace AdamDotCom.Amazon.Domain
             return MapProductsAndReviews(products, reviews);
         }
 
-        public virtual List<string> GetErrors()
+        public virtual IList<KeyValuePair<string, string>> GetErrors()
         {
             return errors;
         }

@@ -100,7 +100,7 @@ namespace AdamDotCom.Amazon.UnitTests
 
             foreach (var error in amazonResponse.Errors)
             {
-                if(error.Contains("CustomerId"))
+                if(error.Key.Contains("CustomerId"))
                 {
                     Assert.IsTrue(true);
                 }
