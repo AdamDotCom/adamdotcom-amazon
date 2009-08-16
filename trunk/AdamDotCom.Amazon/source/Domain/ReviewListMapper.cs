@@ -58,7 +58,7 @@ namespace AdamDotCom.Amazon.Domain
             }
             catch(Exception ex)
             {
-                errors.Add(new KeyValuePair<string, string>("Unknown", ex.Message));
+                errors.Add(new KeyValuePair<string, string>("ServiceError", ex.Message));
             }
         }
 

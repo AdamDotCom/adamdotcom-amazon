@@ -35,10 +35,8 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
             
             var listLookupResponse = new ListLookupResponse();
 
-            //Amazon Lists can return 300 items at 10 items per page and 
-            // I can't figure out how to find the total number of pages number in the Amazon Response
-            // so I'm using the max page requests just incase.
-            for (int currentPageRequest = 1; currentPageRequest <= 30; currentPageRequest++)
+            //Amazon Lists can return 30 items at 10 items per page and 
+            for (int currentPageRequest = 1; currentPageRequest <= 3; currentPageRequest++)
             {
 
                 var listLookupRequest = new ListLookupRequest
@@ -71,7 +69,11 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
                     {
                         MapErrors(listLookupResponse.OperationRequest.Errors);
                     }
-                    break;
+                    if (listLookupResponse.Lists[0].Request.Errors != null)
+                    {
+                        MapErrors(listLookupResponse.Lists[0].Request.Errors);
+                    }
+                break;
                 }
 
                 listItemsToReturn.AddRange(MapListItems(listLookupResponse.Lists[0].List[0].ListItem));

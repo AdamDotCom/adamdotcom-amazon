@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Linq;
 using AdamDotCom.Amazon.Domain;
 using AdamDotCom.Amazon.Domain.Interfaces;
 using NUnit.Framework;
@@ -58,7 +59,10 @@ namespace AdamDotCom.Amazon.UnitTests
 
             var amazonResponse = new AmazonFactory(amazonRequestLocal).GetResponse();
 
-            Assert.Greater(amazonResponse.Errors.Count, 0);
+            Assert.AreEqual(2, amazonResponse.Errors.Count);
+
+            Assert.IsTrue(amazonResponse.Errors.Select(e => e.Key == "CustomerId") != null);
+            Assert.IsTrue(amazonResponse.Errors.Select(e => e.Key == "ListId") != null);
 
             foreach (var error in amazonResponse.Errors)
             {

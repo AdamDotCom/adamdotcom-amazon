@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 using AdamDotCom.Amazon.Domain;
+using AdamDotCom.Amazon.Domain.Extensions;
 using AdamDotCom.Amazon.Domain.Interfaces;
 
 [assembly: ContractNamespace("http://adam.kahtava.com/services/amazon", ClrNamespace = "AdamDotCom.Amazon.Domain")]
@@ -31,9 +32,13 @@ namespace AdamDotCom.Amazon.Domain
         {
             var amazonResponse = new AmazonResponse {Errors = new List<KeyValuePair<string, string>>()};
 
-            if(string.IsNullOrEmpty(amazonRequest.CustomerId) && string.IsNullOrEmpty(amazonRequest.ListId))
+            if (string.IsNullOrEmpty(amazonRequest.CustomerId))
             {
-                amazonResponse.Errors.Add(new KeyValuePair<string, string>("CustomerId", "A CustomerId or a ListId must be specified."));
+                amazonResponse.Errors.Add(new KeyValuePair<string, string>("CustomerId", "A CustomerId must be specified."));
+            }
+            if (string.IsNullOrEmpty(amazonRequest.ListId))
+            {
+                amazonResponse.Errors.Add(new KeyValuePair<string, string>("ListId", "A ListId must be specified."));
             }
 
             if (productListMapper != null)
@@ -42,7 +47,7 @@ namespace AdamDotCom.Amazon.Domain
                 {
                     foreach (var item in productListMapper.GetErrors())
                     {
-                        amazonResponse.Errors.Add(item);
+                        amazonResponse.Errors.Add(item.Translate());
                     }
                 }
                 else
@@ -57,7 +62,7 @@ namespace AdamDotCom.Amazon.Domain
                 {
                     foreach (var item in reviewListMapper.GetErrors())
                     {
-                        amazonResponse.Errors.Add(item);
+                        amazonResponse.Errors.Add(item.Translate());
                     }
                 }
                 else
