@@ -37,21 +37,51 @@ namespace AdamDotCom.Amazon.Service
         {
             var wishlistRegex = new Regex("ref=cm_psrch_wishl?(.*)&id=(?<ListId>(.*))\" title=\"View Wish List\"");
 
-            return GetTokenString(wishlistRegex, "ListId");
+            var listId = GetTokenString(wishlistRegex, "ListId");
+
+            if (string.IsNullOrEmpty(listId))
+            {
+                wishlistRegex = new Regex("/wishlist/(?<ListId>(.*))/ref=cm_pdp_wish_all_itms");
+
+                listId = GetTokenString(wishlistRegex, "ListId");
+            }
+            if (string.IsNullOrEmpty(listId))
+            {
+                AddNotFoundError("ListId");
+            }
+
+            return listId;
         }
 
         public string GetCustomerId()
         {
             var reviewsRegex = new Regex("member-reviews/(?<CustomerId>(.*))/ref=cm_psrch_reviews");
 
-            return GetTokenString(reviewsRegex, "CustomerId");
+            var customerId = GetTokenString(reviewsRegex, "CustomerId");
+
+            if(string.IsNullOrEmpty(customerId))
+            {
+                reviewsRegex = new Regex("profile/(?<CustomerId>(.*))\"");
+
+                customerId = GetTokenString(reviewsRegex, "CustomerId");                
+            }
+            if (string.IsNullOrEmpty(customerId))
+            {
+                AddNotFoundError("CustomerId");
+            }
+
+            return customerId;
+        }
+
+        private void AddNotFoundError(string token)
+        {
+            Errors.Add(new KeyValuePair<string, string>(token, string.Format("{0} could not be found", token)));
         }
 
         private string GetTokenString(Regex wishlistRegex, string token)
         {
             if(string.IsNullOrEmpty(pageSource))
             {
-                Errors.Add(new KeyValuePair<string, string>("ProfileSniffer", string.Format("Page source {0} was not retrieved", profileSearchUri)));
                 return null;
             }
 
@@ -65,11 +95,9 @@ namespace AdamDotCom.Amazon.Service
                 }
                 catch
                 {
-                    Errors.Add(new KeyValuePair<string, string>(token, string.Format("{0} could not be found", token)));
                     return null;
                 }
             }
-            Errors.Add(new KeyValuePair<string, string>(token, string.Format("{0} could not be found", token)));
             return null;
         }
     }
