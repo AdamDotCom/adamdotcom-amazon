@@ -111,5 +111,56 @@ namespace AdamDotCom.Amazon.UnitTests
                 Debug.WriteLine(error);
             }
         }
+
+        [Test]
+        public void ShouldNotReturnErrorsBecauseListIdBeenSpecified()
+        {
+            var amazonRequestLocal = new AmazonRequest
+            {
+                AssociateTag = "adamkahtavaap-20",
+                AWSAccessKeyId = "1MRFMGASE6CQKS2WTMR2",
+                CustomerId = null,
+                ListId = "3JU6ASKNUS7B8"
+            };
+
+            var amazonResponse = new AmazonFactory(amazonRequestLocal).GetResponse();
+
+            Assert.AreEqual(0, amazonResponse.Errors.Count);
+
+            foreach (var error in amazonResponse.Errors)
+            {
+                if (error.Key.Contains("CustomerId"))
+                {
+                    Assert.IsTrue(true);
+                }
+                Debug.WriteLine(error);
+            }
+        }
+
+        [Test]
+        public void ShouldNotReturnErrorsBecauseCutsomerIdHasBeenSpecified()
+        {
+            var amazonRequestLocal = new AmazonRequest
+            {
+                AssociateTag = "adamkahtavaap-20",
+                AWSAccessKeyId = "1MRFMGASE6CQKS2WTMR2",
+                CustomerId = "A2JM0EQJELFL69",
+                ListId = null
+            };
+
+            var amazonResponse = new AmazonFactory(amazonRequestLocal).GetResponse();
+
+            Assert.AreEqual(0, amazonResponse.Errors.Count);
+
+            foreach (var error in amazonResponse.Errors)
+            {
+                if (error.Key.Contains("CustomerId"))
+                {
+                    Assert.IsTrue(true);
+                }
+                Debug.WriteLine(error);
+            }
+        }
+
     }
 }
