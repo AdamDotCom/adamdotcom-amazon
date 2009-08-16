@@ -27,7 +27,7 @@ namespace AdamDotCom.Amazon.Service
         [DataMember] public string Description;
     }
 
-    [CollectionDataContract(Name = "Errors", ItemName = "Error", KeyName="Code", ValueName="Value")]
+    [CollectionDataContract(Name = "Errors", ItemName = "Error", KeyName="Key", ValueName="Value")]
     public class Errors: Dictionary<string, string>
     {
         public Errors()

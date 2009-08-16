@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.ServiceModel.Web;
@@ -10,9 +11,9 @@ namespace AdamDotCom.Amazon.Service
 {
     public class AmazonService : IAmazon
     {
-        public Reviews ReviewsXml(string customerId)
+        public Reviews ReviewsXml(string CustomerId)
         {
-            return Reviews(customerId);
+            return Reviews(CustomerId);
         }
 
         public Reviews ReviewsJson(string customerId)
@@ -20,38 +21,38 @@ namespace AdamDotCom.Amazon.Service
             return Reviews(customerId);
         }
 
-        public Wishlist WishlistXml(string listId)
+        public Wishlist WishlistXml(string ListId)
         {
-            return Wishlist(listId);
+            return Wishlist(ListId);
         }
 
-        public Wishlist WishlistJson(string listId)
+        public Wishlist WishlistJson(string ListId)
         {
-            return Wishlist(listId);
+            return Wishlist(ListId);
         }
 
-        public AmazonResponse DiscoverUserXml(string username)
+        public Profile DiscoverUserXml(string Username)
         {
-            throw new NotImplementedException();
+            return DiscoverUser(Username);
         }
 
-        public AmazonResponse DiscoverUserJson(string username)
+        public Profile DiscoverUserJson(string Username)
         {
-            throw new NotImplementedException();
+            return DiscoverUser(Username);
         }
 
-        private static Reviews Reviews(string customerId)
+        private static Reviews Reviews(string CustomerId)
         {
-            AmazonResponse amazonResponse = new AmazonFactory(BuildRequest(customerId, null)).GetResponse();
+            AmazonResponse amazonResponse = new AmazonFactory(BuildRequest(CustomerId, null)).GetResponse();
 
             HandleErrors(amazonResponse);
 
             return new Reviews(amazonResponse.Reviews.OrderByDescending(r => r.Date));
         }
 
-        private static Wishlist Wishlist(string listId)
+        private static Wishlist Wishlist(string ListId)
         {
-            AmazonResponse amazonResponse = new AmazonFactory(BuildRequest(null, listId)).GetResponse();
+            AmazonResponse amazonResponse = new AmazonFactory(BuildRequest(null, ListId)).GetResponse();
 
             HandleErrors(amazonResponse);
 
@@ -69,11 +70,31 @@ namespace AdamDotCom.Amazon.Service
                        };
         }
 
+        private static Profile DiscoverUser(string Username)
+        {
+            var sniffer = new ProfileSniffer(Username);
+
+            var customerId = sniffer.GetCustomerId();
+            var listId = sniffer.GetListId();
+            
+            HandleErrors(sniffer);
+
+            return new Profile {CustomerId = customerId, ListId = listId};
+        }
+
         private static void HandleErrors(IAmazonResponse amazonResponse)
         {
             if (amazonResponse.Errors != null && amazonResponse.Errors.Count != 0)
             {
-                throw new RestException(HttpStatusCode.BadRequest, amazonResponse.Errors);
+                throw new RestException(HttpStatusCode.BadRequest, amazonResponse.Errors, (int) ErrorCode.InternalError);
+            }
+        }
+
+        private static void HandleErrors(ProfileSniffer sniffer)
+        {
+            if(sniffer.Errors != null && sniffer.Errors.Count != 0)
+            {
+                throw new RestException(HttpStatusCode.BadRequest, sniffer.Errors, (int)ErrorCode.InternalError);
             }
         }
     }

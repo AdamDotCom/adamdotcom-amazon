@@ -12,13 +12,13 @@ namespace AdamDotCom.Amazon.Service.Utilities
             throw new HttpException((int)HttpStatusCode.InternalServerError, "Error");
         }
 
-        public RestException(HttpStatusCode httpStatusCode, List<string> errorList)
+        public RestException(HttpStatusCode httpStatusCode, IEnumerable<KeyValuePair<string, string>> errorList, int errorCode)
         {
-            var exception = new HttpException((int) httpStatusCode, "Error", 10);
+            var exception = new HttpException((int) httpStatusCode, "RestException", errorCode);
 
-            foreach (string item in errorList)
+            foreach (var item in errorList)
             {
-                exception.Data.Add("key", item);
+                exception.Data.Add(item.Key, item.Value);
             }
 
             throw exception;
