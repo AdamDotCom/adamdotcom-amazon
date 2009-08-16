@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
-using System.ServiceModel.Web;
 using AdamDotCom.Amazon.Domain;
 using AdamDotCom.Amazon.Domain.Interfaces;
+using AdamDotCom.Amazon.Service.Extensions;
 using AdamDotCom.Amazon.Service.Utilities;
 
 namespace AdamDotCom.Amazon.Service
@@ -43,35 +41,39 @@ namespace AdamDotCom.Amazon.Service
 
         private static Reviews Reviews(string CustomerId)
         {
-            AmazonResponse amazonResponse = new AmazonFactory(BuildRequest(CustomerId, null)).GetResponse();
+            if(ServiceCache.IsInCache(CustomerId))
+            {
+                return (Reviews) ServiceCache.GetFromCache(CustomerId);
+            }
+            
+            var amazonResponse = new AmazonFactory(BuildRequest(CustomerId, null)).GetResponse();
 
             HandleErrors(amazonResponse);
 
-            return new Reviews(amazonResponse.Reviews.OrderByDescending(r => r.Date));
+            return new Reviews(amazonResponse.Reviews.OrderByDescending(r => r.Date)).AddToCache(CustomerId);
         }
 
         private static Wishlist Wishlist(string ListId)
         {
-            AmazonResponse amazonResponse = new AmazonFactory(BuildRequest(null, ListId)).GetResponse();
+            if(ServiceCache.IsInCache(ListId))
+            {
+                return (Wishlist) ServiceCache.GetFromCache(ListId);
+            }
+
+            var amazonResponse = new AmazonFactory(BuildRequest(null, ListId)).GetResponse();
 
             HandleErrors(amazonResponse);
 
-            return new Wishlist(amazonResponse.Products.OrderBy(p => p.AuthorsMLA).ThenBy(p => p.Title));
-        }
-
-        private static AmazonRequest BuildRequest(string customerId, string listId)
-        {
-            return new AmazonRequest
-                       {
-                           AssociateTag = "adamkahtavaap-20",
-                           AWSAccessKeyId = "1MRFMGASE6CQKS2WTMR2",
-                           CustomerId = customerId,
-                           ListId = listId
-                       };
+            return new Wishlist(amazonResponse.Products.OrderBy(p => p.AuthorsMLA).ThenBy(p => p.Title)).AddToCache(ListId);
         }
 
         private static Profile DiscoverUser(string Username)
         {
+            if (ServiceCache.IsInCache(Username))
+            {
+                return (Profile) ServiceCache.GetFromCache(Username);
+            }
+
             var sniffer = new ProfileSniffer(Username);
 
             var customerId = sniffer.GetCustomerId();
@@ -79,7 +81,18 @@ namespace AdamDotCom.Amazon.Service
             
             HandleErrors(sniffer);
 
-            return new Profile {CustomerId = customerId, ListId = listId};
+            return new Profile {CustomerId = customerId, ListId = listId}.AddToCache(Username);
+        }
+
+        private static AmazonRequest BuildRequest(string customerId, string listId)
+        {
+            return new AmazonRequest
+            {
+                AssociateTag = "adamkahtavaap-20",
+                AWSAccessKeyId = "1MRFMGASE6CQKS2WTMR2",
+                CustomerId = customerId,
+                ListId = listId
+            };
         }
 
         private static void HandleErrors(IAmazonResponse amazonResponse)
