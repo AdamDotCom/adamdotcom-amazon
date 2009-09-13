@@ -1,6 +1,5 @@
 ﻿using AdamDotCom.Amazon.Application;
 using AdamDotCom.Amazon.Application.Interfaces;
-using AdamDotCom.Amazon.Domain;
 using NUnit.Framework;
 
 namespace AdamDotCom.Amazon.UnitTests
@@ -9,15 +8,17 @@ namespace AdamDotCom.Amazon.UnitTests
     public class AmazonApplicationTest
     {
         [Test]
+        public void SanityTest()
+        {
+            var amazonRequest = TestHelper.ValidAmazonRequest;
+
+            Assert.IsFalse(string.IsNullOrEmpty(amazonRequest.SecretAccessKey), "Doesn't look like the config values are being picked up!");
+        }
+
+        [Test]
         public void ShouldSerializeObject()
         {
-            var amazonRequest = new AmazonRequest
-                                    {
-                                        AssociateTag = "adamkahtavaap-20",
-                                        AWSAccessKeyId = "1MRFMGASE6CQKS2WTMR2",
-                                        CustomerId = "A2JM0EQJELFL69",
-                                        ListId = "3JU6ASKNUS7B8"
-                                    };
+            var amazonRequest = TestHelper.ValidAmazonRequest;
 
             var fileParameters = new FileParameters
                                      {

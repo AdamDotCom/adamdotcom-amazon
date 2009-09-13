@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace AdamDotCom.Amazon.Domain.Interfaces
 {
     public interface IAmazonRequest
@@ -6,7 +8,7 @@ namespace AdamDotCom.Amazon.Domain.Interfaces
         /// Your Amazon Web Service (AWS) access key.
         /// Dont' have one? Get one here: http://aws.amazon.com/
         /// </summary>
-        string AWSAccessKeyId { get; set; }
+        string AccessKeyId { get; set; }
 
         /// <summary>
         /// Your Amazon Associates tag.
@@ -29,5 +31,7 @@ namespace AdamDotCom.Amazon.Domain.Interfaces
         /// then pulling out A2JM0EQJELFL69 (the last element of the url above).
         /// </summary>
         string CustomerId { get; set; }
+
+        string SecretAccessKey { get; }
     }
 }

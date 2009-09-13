@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Linq;
 using AdamDotCom.Amazon.Domain;
-using AdamDotCom.Amazon.Domain.Interfaces;
+using AdamDotCom.Amazon.Domain.Extensions;
 using NUnit.Framework;
 
 namespace AdamDotCom.Amazon.UnitTests
@@ -9,27 +9,11 @@ namespace AdamDotCom.Amazon.UnitTests
     [TestFixture]
     public class AmazonFactoryTest
     {
-        private IAmazonRequest amazonRequest;
-
-        [TestFixtureSetUp]
-        protected void SetUp()
-        {
-            amazonRequest = new AmazonRequest
-                                {
-                                    AssociateTag = "adamkahtavaap-20",
-                                    AWSAccessKeyId = "1MRFMGASE6CQKS2WTMR2",
-                                    CustomerId = "A2JM0EQJELFL69",
-                                    ListId = "3JU6ASKNUS7B8"
-                                };
-        }
 
         [Test]
         public void ShouldInvokeAndReturnSuccessfulProductsAndReviewsWithNoErrors()
         {
-            amazonRequest.AssociateTag = "adamkahtavaap-20";
-            amazonRequest.AWSAccessKeyId = "1MRFMGASE6CQKS2WTMR2";
-            amazonRequest.CustomerId = "A2JM0EQJELFL69";
-            amazonRequest.ListId = "3JU6ASKNUS7B8";
+            var amazonRequest = TestHelper.ValidAmazonRequest;
 
             var amazonResponse = new AmazonFactory(amazonRequest).GetResponse();
 
@@ -46,63 +30,114 @@ namespace AdamDotCom.Amazon.UnitTests
             Assert.Greater(amazonResponse.Reviews.Count, 10, errors);
 
             Assert.AreEqual(amazonResponse.Errors.Count, 0, errors);
+        }
 
+        [Test]
+        public void ShouldInvokeAndReturnErrorsFromMissingSecretAccessKey()
+        {
+            var amazonRequest = new AmazonRequest
+                                    {
+                                        AssociateTag = TestHelper.AssociateTag,
+                                        AccessKeyId = TestHelper.AwsAccessKey,
+                                        SecretAccessKey = null
+                                    };
+
+            var errors = amazonRequest.Validate();
+
+            foreach (var error in errors)
+            {
+                Debug.WriteLine(error);
+            }
+
+            Assert.IsTrue(errors.Select(e => e.Key == "SecretAccessKey") != null);
+        }
+
+        [Test, Ignore("Explicit Test")]
+        public void ShouldInvokeAndReturnErrorsFromIncorrectSecretAccessKey()
+        {
+            var amazonRequest = new AmazonRequest
+            {
+                AssociateTag = TestHelper.AssociateTag,
+                AccessKeyId = TestHelper.AwsAccessKey,
+                CustomerId = TestHelper.CustomerId,
+                ListId = TestHelper.ListId,
+                SecretAccessKey = "injectingIncorrectSecretyAccessKey"
+            };
+
+            var amazonResponse = new AmazonFactory(amazonRequest).GetResponse();
+
+            foreach (var error in amazonResponse.Errors)
+            {
+                Debug.WriteLine(error);
+            }
+
+            Assert.AreEqual(2, amazonResponse.Errors.Count);
+            Assert.IsTrue(amazonResponse.Errors.Select(e => e.Key == "ServiceError") != null);
         }
 
         [Test]
         public void ShouldInvokeAndReturnErrorsFromIncorrectCustomerIdAndListId()
         {
-            var amazonRequestLocal = amazonRequest;
+            var amazonRequest = new AmazonRequest
+                                    {
+                                        AssociateTag = TestHelper.AssociateTag,
+                                        AccessKeyId = TestHelper.AwsAccessKey,
+                                        CustomerId = "injectingIncorrectData",
+                                        ListId = "injectingIncorrectData2",
+                                        SecretAccessKey = TestHelper.SecretAccessKey
+                                    };
 
-            amazonRequestLocal.CustomerId = "injectingIncorrectData";
-            amazonRequestLocal.ListId = "injectingIncorrectData2";
+            var amazonResponse = new AmazonFactory(amazonRequest).GetResponse();
 
-            var amazonResponse = new AmazonFactory(amazonRequestLocal).GetResponse();
+            foreach (var error in amazonResponse.Errors)
+            {
+                Debug.WriteLine(error);
+            }
 
             Assert.AreEqual(2, amazonResponse.Errors.Count);
 
             Assert.IsTrue(amazonResponse.Errors.Select(e => e.Key == "CustomerId") != null);
             Assert.IsTrue(amazonResponse.Errors.Select(e => e.Key == "ListId") != null);
-
-            foreach (var error in amazonResponse.Errors)
-            {
-                Debug.WriteLine(error);
-            }
-
         }
 
-        [Test]
+        [Test, Ignore("Explicit Test")]
         public void ShouldInvokeAndReturnErrorsFromIncorrectAWSAccessKeyId()
         {
-            var amazonRequestLocal = amazonRequest;
-            amazonRequest.AWSAccessKeyId = "trash";
+            var amazonRequest = new AmazonRequest
+                                    {
+                                        AssociateTag = TestHelper.AssociateTag,
+                                        AccessKeyId = "injectingIncorrectAccessKey",
+                                        CustomerId = TestHelper.CustomerId,
+                                        ListId = TestHelper.ListId,
+                                        SecretAccessKey = TestHelper.SecretAccessKey
+                                    };
 
-            var amazonResponse = new AmazonFactory(amazonRequestLocal).GetResponse();
-
-            Assert.Greater(amazonResponse.Errors.Count, 0);
+            var amazonResponse = new AmazonFactory(amazonRequest).GetResponse();
 
             foreach (var error in amazonResponse.Errors)
             {
                 Debug.WriteLine(error);
             }
+
+            Assert.AreEqual(2, amazonResponse.Errors.Count);
+            Assert.IsTrue(amazonResponse.Errors.Select(e => e.Key == "ServiceError") != null);
         }
 
         [Test]
         public void ShouldReturnErrorsBecauseListIdAndCustomerIdHaveNotBeenSpecified()
         {
-            var amazonRequestLocal = new AmazonRequest
-                                         {
-                                             AssociateTag = "adamkahtavaap-20",
-                                             AWSAccessKeyId = "1MRFMGASE6CQKS2WTMR2",
-                                             CustomerId = string.Empty,
-                                             ListId = string.Empty
-                                         };
+            var amazonRequest = new AmazonRequest
+                                    {
+                                        AssociateTag = TestHelper.AssociateTag,
+                                        AccessKeyId = TestHelper.AwsAccessKey,
+                                        CustomerId = null,
+                                        ListId = null,
+                                        SecretAccessKey = TestHelper.SecretAccessKey
+                                    };
 
-            var amazonResponse = new AmazonFactory(amazonRequestLocal).GetResponse();
+            var errors = amazonRequest.Validate();
 
-            Assert.Greater(amazonResponse.Errors.Count, 0);
-
-            foreach (var error in amazonResponse.Errors)
+            foreach (var error in errors)
             {
                 if(error.Key.Contains("CustomerId"))
                 {
@@ -110,24 +145,24 @@ namespace AdamDotCom.Amazon.UnitTests
                 }
                 Debug.WriteLine(error);
             }
+            Assert.Greater(errors.Count, 0);
         }
 
         [Test]
         public void ShouldNotReturnErrorsBecauseListIdBeenSpecified()
         {
-            var amazonRequestLocal = new AmazonRequest
-            {
-                AssociateTag = "adamkahtavaap-20",
-                AWSAccessKeyId = "1MRFMGASE6CQKS2WTMR2",
-                CustomerId = null,
-                ListId = "3JU6ASKNUS7B8"
-            };
+            var amazonRequest = new AmazonRequest
+                                    {
+                                        AssociateTag = TestHelper.AssociateTag,
+                                        AccessKeyId = TestHelper.AwsAccessKey,
+                                        CustomerId = null,
+                                        ListId = TestHelper.ListId,
+                                        SecretAccessKey = TestHelper.SecretAccessKey
+                                    };
 
-            var amazonResponse = new AmazonFactory(amazonRequestLocal).GetResponse();
+            var errors = amazonRequest.Validate();
 
-            Assert.AreEqual(0, amazonResponse.Errors.Count);
-
-            foreach (var error in amazonResponse.Errors)
+            foreach (var error in errors)
             {
                 if (error.Key.Contains("CustomerId"))
                 {
@@ -135,24 +170,24 @@ namespace AdamDotCom.Amazon.UnitTests
                 }
                 Debug.WriteLine(error);
             }
+            Assert.AreEqual(0, errors.Count);
         }
 
         [Test]
-        public void ShouldNotReturnErrorsBecauseCutsomerIdHasBeenSpecified()
+        public void ShouldNotReturnErrorsBecauseCustomerIdHasBeenSpecified()
         {
-            var amazonRequestLocal = new AmazonRequest
-            {
-                AssociateTag = "adamkahtavaap-20",
-                AWSAccessKeyId = "1MRFMGASE6CQKS2WTMR2",
-                CustomerId = "A2JM0EQJELFL69",
-                ListId = null
-            };
+            var amazonRequest = new AmazonRequest
+                                    {
+                                        AssociateTag = TestHelper.AssociateTag,
+                                        AccessKeyId = TestHelper.AwsAccessKey,
+                                        CustomerId = TestHelper.CustomerId,
+                                        ListId = null,
+                                        SecretAccessKey = TestHelper.SecretAccessKey
+                                    };
 
-            var amazonResponse = new AmazonFactory(amazonRequestLocal).GetResponse();
+            var errors = amazonRequest.Validate();
 
-            Assert.AreEqual(0, amazonResponse.Errors.Count);
-
-            foreach (var error in amazonResponse.Errors)
+            foreach (var error in errors)
             {
                 if (error.Key.Contains("CustomerId"))
                 {
@@ -160,7 +195,7 @@ namespace AdamDotCom.Amazon.UnitTests
                 }
                 Debug.WriteLine(error);
             }
+            Assert.AreEqual(0, errors.Count);
         }
-
     }
 }

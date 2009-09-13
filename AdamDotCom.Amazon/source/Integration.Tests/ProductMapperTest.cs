@@ -15,7 +15,7 @@ namespace AdamDotCom.Amazon.UnitTests
         [TestFixtureSetUp]
         protected void SetUp()
         {
-            productMapper = new ProductMapper("1MRFMGASE6CQKS2WTMR2", "adamkahtavaap-20");
+            productMapper = new ProductMapper(TestHelper.AwsAccessKey, TestHelper.AssociateTag, TestHelper.SecretAccessKey);
 
             ASINList = new List<string>
                            {

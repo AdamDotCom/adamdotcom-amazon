@@ -11,20 +11,25 @@ namespace AdamDotCom.Amazon.Domain
     {
         private readonly ProductListMapper productListMapper;
         private readonly ReviewListMapper reviewListMapper;
-        private readonly IAmazonRequest amazonRequest;
+        private readonly AmazonResponse amazonResponse;
 
         public AmazonFactory(IAmazonRequest amazonRequest)
         {
-            this.amazonRequest = amazonRequest;
+            amazonResponse = new AmazonResponse { Errors = new List<KeyValuePair<string, string>>() };
 
-            if (!string.IsNullOrEmpty(amazonRequest.ListId))
-            {
-                productListMapper = new ProductListMapper(amazonRequest);
-            }
+            amazonResponse.Errors = amazonRequest.Validate();
 
-            if (!string.IsNullOrEmpty(amazonRequest.CustomerId))
+            if(amazonResponse.Errors.Count == 0)
             {
-                reviewListMapper = new ReviewListMapper(amazonRequest);
+                if (!string.IsNullOrEmpty(amazonRequest.ListId))
+                {
+                    productListMapper = new ProductListMapper(amazonRequest);
+                }
+
+                if (!string.IsNullOrEmpty(amazonRequest.CustomerId))
+                {
+                    reviewListMapper = new ReviewListMapper(amazonRequest);
+                }                
             }
         }
 
@@ -32,15 +37,13 @@ namespace AdamDotCom.Amazon.Domain
         {
             var amazonResponse = new AmazonResponse {Errors = new List<KeyValuePair<string, string>>()};
 
-            Validate(amazonResponse);
-
             if (productListMapper != null)
             {
                 if (productListMapper.GetErrors().Count != 0)
                 {
-                    foreach (var item in productListMapper.GetErrors())
+                    foreach (var error in productListMapper.GetErrors())
                     {
-                        amazonResponse.Errors.Add(item.Translate());
+                        amazonResponse.Errors.Add(error.Translate());
                     }
                 }
                 else
@@ -53,9 +56,9 @@ namespace AdamDotCom.Amazon.Domain
             {
                 if (reviewListMapper.GetErrors().Count != 0)
                 {
-                    foreach (var item in reviewListMapper.GetErrors())
+                    foreach (var error in reviewListMapper.GetErrors())
                     {
-                        amazonResponse.Errors.Add(item.Translate());
+                        amazonResponse.Errors.Add(error.Translate());
                     }
                 }
                 else
@@ -65,32 +68,6 @@ namespace AdamDotCom.Amazon.Domain
             }
 
             return amazonResponse;
-        }
-
-        private void Validate(AmazonResponse amazonResponse)
-        {
-            if (amazonRequest.CustomerId == null || amazonRequest.ListId == null)
-            {
-                if (amazonRequest.ListId == null && string.IsNullOrEmpty(amazonRequest.CustomerId))
-                {
-                    amazonResponse.Errors.Add(new KeyValuePair<string, string>("CustomerId", "A CustomerId must be specified."));
-                }
-                if (amazonRequest.CustomerId == null && string.IsNullOrEmpty(amazonRequest.ListId))
-                {
-                    amazonResponse.Errors.Add(new KeyValuePair<string, string>("ListId", "A ListId must be specified."));
-                }
-            }
-            else if (string.IsNullOrEmpty(amazonRequest.CustomerId) || string.IsNullOrEmpty(amazonRequest.ListId))
-            {
-                if (string.IsNullOrEmpty(amazonRequest.CustomerId))
-                {
-                    amazonResponse.Errors.Add(new KeyValuePair<string, string>("CustomerId", "A CustomerId must be specified."));
-                }
-                if (string.IsNullOrEmpty(amazonRequest.ListId))
-                {
-                    amazonResponse.Errors.Add(new KeyValuePair<string, string>("ListId", "A ListId must be specified."));
-                }
-            }
         }
     }
 }

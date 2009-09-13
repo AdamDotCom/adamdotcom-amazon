@@ -13,7 +13,7 @@ namespace AdamDotCom.Amazon.UnitTests
         [TestFixtureSetUp]
         protected void SetUp()
         {
-            reviewMapper = new ReviewMapper("1MRFMGASE6CQKS2WTMR2", "adamkahtavaap-20", "A2JM0EQJELFL69");
+            reviewMapper = new ReviewMapper(TestHelper.AwsAccessKey, TestHelper.AssociateTag, TestHelper.SecretAccessKey, "A2JM0EQJELFL69");
         }
 
         [Test]
