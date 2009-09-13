@@ -31,29 +31,22 @@ namespace AdamDotCom.Amazon.Domain
 
             try
             {
-                var reviewMapper = new ReviewMapper(amazonRequest.AWSAccessKeyId, amazonRequest.AssociateTag, amazonRequest.CustomerId);
+                var reviewMapper = new ReviewMapper(amazonRequest.AccessKeyId, amazonRequest.AssociateTag, amazonRequest.SecretAccessKey, amazonRequest.CustomerId);
 
-                using (reviewMapper)
+                reviews = reviewMapper.GetReviews();
+
+                foreach (var error in reviewMapper.GetErrors())
                 {
-                    reviews = reviewMapper.GetReviews();
-
-                    foreach (var error in reviewMapper.GetErrors())
-                    {
-                        errors.Add(error);
-                    }
-
+                    errors.Add(error);
                 }
 
-                var productMapper = new ProductMapper(amazonRequest.AWSAccessKeyId, amazonRequest.AssociateTag);
+                var productMapper = new ProductMapper(amazonRequest.AccessKeyId, amazonRequest.AssociateTag, amazonRequest.SecretAccessKey);
 
-                using (productMapper)
+                products = productMapper.GetProducts(reviews.ConvertAll(review => review.ASIN));
+
+                foreach (var error in productMapper.GetErrors())
                 {
-                    products = productMapper.GetProducts(reviews.ConvertAll(review => review.ASIN));
-
-                    foreach (var error in productMapper.GetErrors())
-                    {
-                        errors.Add(error);
-                    }
+                    errors.Add(error);
                 }
             }
             catch(Exception ex)

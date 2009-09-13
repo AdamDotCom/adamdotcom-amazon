@@ -1,24 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using AdamDotCom.Amazon.WebServiceTranslator.com.amazon.webservices;
 using AdamDotCom.Amazon.WebServiceTranslator;
 using AdamDotCom.Amazon.WebServiceTranslator.Interfaces;
 
 namespace AdamDotCom.Amazon.WebServiceTranslator
 {
-    public class ListMapper : IListMapper, IDisposable
+    public class ListMapper : IListMapper
     {
         private string listId;
         private string awsAccessKeyId;
         private string associateTag;
         private IList<KeyValuePair<string, string>> errors;
-        private AWSECommerceService awseCommerceService;
 
-        public ListMapper(string awsAccessKeyId, string associateTag, string listId)
+        public ListMapper(string accessKeyId, string associateTag, string secretAccessKey, string listId)
         {
-            awseCommerceService = new AWSECommerceService();
+            AWSECommerceServiceInstance.SetPolicy(accessKeyId, secretAccessKey);
+
             this.listId = listId;
-            this.awsAccessKeyId = awsAccessKeyId;
+            this.awsAccessKeyId = accessKeyId;
             this.associateTag = associateTag;
 
             errors = new List<KeyValuePair<string, string>>();
@@ -58,10 +57,7 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
                                          Request = requests
                                      };
 
-                using (awseCommerceService)
-                {
-                    listLookupResponse = awseCommerceService.ListLookup(listLookup);
-                }
+                listLookupResponse = AWSECommerceServiceInstance.AWSECommerceService.ListLookup(listLookup);
 
                 if (listLookupResponse.Lists == null || listLookupResponse.Lists[0].List == null)
                 {
@@ -73,7 +69,7 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
                     {
                         MapErrors(listLookupResponse.Lists[0].Request.Errors);
                     }
-                break;
+                    break;
                 }
 
                 listItemsToReturn.AddRange(MapListItems(listLookupResponse.Lists[0].List[0].ListItem));
@@ -110,11 +106,6 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
             {
                 errors.Add(new KeyValuePair<string, string>(error.Code, error.Message));
             }
-        }
-
-        public void Dispose()
-        {
-            awseCommerceService.Dispose();
         }
     }
 }

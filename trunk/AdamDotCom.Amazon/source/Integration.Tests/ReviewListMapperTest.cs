@@ -45,12 +45,7 @@ namespace AdamDotCom.Amazon.UnitTests
         [Test]
         public void ShouldMapRealAmazonDataTogether()
         {
-            var amazonRequest = new AmazonRequest
-                                    {
-                                        AssociateTag = "adamkahtavaap-20",
-                                        AWSAccessKeyId = "1MRFMGASE6CQKS2WTMR2",
-                                        CustomerId = "A2JM0EQJELFL69"
-                                    };
+            var amazonRequest = TestHelper.ValidAmazonRequest;
 
             reviewMapper = new ReviewListMapper(amazonRequest);
 

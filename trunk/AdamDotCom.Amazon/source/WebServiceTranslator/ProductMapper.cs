@@ -1,22 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using AdamDotCom.Amazon.WebServiceTranslator;
 using AdamDotCom.Amazon.WebServiceTranslator.com.amazon.webservices;
 using AdamDotCom.Amazon.WebServiceTranslator.Interfaces;
 
 namespace AdamDotCom.Amazon.WebServiceTranslator
 {
-    public class ProductMapper : IProductMapper, IDisposable
+    public class ProductMapper : IProductMapper
     {
         private string awsAccessKeyId;
         private string associateTag;
         private List<KeyValuePair<string, string>> errors;
-        private AWSECommerceService awseCommerceService;
 
-        public ProductMapper(string awsAccessKeyId, string associateTag)
+        public ProductMapper(string accessKeyId, string associateTag, string secretAccessKey)
         {
-            awseCommerceService = new AWSECommerceService();
-            this.awsAccessKeyId = awsAccessKeyId;
+            AWSECommerceServiceInstance.SetPolicy(accessKeyId, secretAccessKey);
+
+            this.awsAccessKeyId = accessKeyId;
             this.associateTag = associateTag;
 
             errors = new List<KeyValuePair<string, string>>();
@@ -61,12 +60,7 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
                                              Request = myItemSearchRequests
                                          };
 
-                    ItemSearchResponse itemSearchResponse;
-
-                    using (awseCommerceService)
-                    {
-                        itemSearchResponse = awseCommerceService.ItemSearch(itemSearch);
-                    }
+                    var itemSearchResponse = AWSECommerceServiceInstance.AWSECommerceService.ItemSearch(itemSearch);
 
                     if (itemSearchResponse.Items == null)
                     {
@@ -74,7 +68,6 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
                         {
                             MapErrors(itemSearchResponse.OperationRequest.Errors);
                         }
-
                         break;
                     }
 
@@ -124,11 +117,6 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
             {
                 errors.Add(new KeyValuePair<string, string>(error.Code, error.Message));
             }
-        }
-
-        public void Dispose()
-        {
-            awseCommerceService.Dispose();
         }
     }
 }

@@ -6,18 +6,18 @@ using AdamDotCom.Amazon.WebServiceTranslator.Interfaces;
 
 namespace AdamDotCom.Amazon.WebServiceTranslator
 {
-    public class ReviewMapper: IReviewMapper, IDisposable
+    public class ReviewMapper: IReviewMapper
     {
         private string awsAccessKeyId;
         private string associateTag;
         private List<KeyValuePair<string, string>> errors;
-        private AWSECommerceService awseCommerceService;
         private string customerId;
 
-        public ReviewMapper(string awsAccessKeyId, string associateTag, string customerId)
+        public ReviewMapper(string accessKeyId, string associateTag, string secretAccessKey, string customerId)
         {
-            awseCommerceService = new AWSECommerceService();
-            this.awsAccessKeyId = awsAccessKeyId;
+            AWSECommerceServiceInstance.SetPolicy(accessKeyId, secretAccessKey);
+
+            this.awsAccessKeyId = accessKeyId;
             this.associateTag = associateTag;
             this.customerId = customerId;
 
@@ -53,12 +53,7 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
                                                     Request = customerContentLookupRequests
                                                 };
 
-                CustomerContentLookupResponse customerContentLookupResponse;
-
-                using (awseCommerceService)
-                {
-                    customerContentLookupResponse = awseCommerceService.CustomerContentLookup(customerContentLookup);
-                }
+                var customerContentLookupResponse = AWSECommerceServiceInstance.AWSECommerceService.CustomerContentLookup(customerContentLookup);
 
                 if (customerContentLookupResponse.Customers == null ||
                     customerContentLookupResponse.Customers[0].Customer == null ||
@@ -117,11 +112,6 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
             {
                 errors.Add(new KeyValuePair<string, string>(error.Code, error.Message));
             }
-        }
-
-        public void Dispose()
-        {
-            awseCommerceService.Dispose();
         }
     }
 }

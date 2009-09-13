@@ -8,7 +8,7 @@ namespace AdamDotCom.Amazon.Domain
         /// Your Amazon Web Service (AWS) access key.
         /// Dont' have one? Get one here: http://aws.amazon.com/
         /// </summary>
-        public string AWSAccessKeyId { get; set; }
+        public string AccessKeyId { get; set; }
 
         /// <summary>
         /// Your Amazon Associates tag.
@@ -31,5 +31,11 @@ namespace AdamDotCom.Amazon.Domain
         /// then pulling out A2JM0EQJELFL69 (the last element of the url above).
         /// </summary>
         public string CustomerId { get; set; }
+
+        /// <summary>
+        /// Your Amazon Subscription Id.
+        /// Don't have one? Get one here: https://aws-portal.amazon.com/gp/aws/developer/account/index.html
+        /// </summary>
+        public string SecretAccessKey { get; set; }
     }
 }

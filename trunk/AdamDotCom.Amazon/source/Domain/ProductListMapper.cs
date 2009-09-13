@@ -21,29 +21,22 @@ namespace AdamDotCom.Amazon.Domain
 
             try
             {
-                var listMapper = new ListMapper(amazonRequest.AWSAccessKeyId, amazonRequest.AssociateTag, amazonRequest.ListId);
+                var listMapper = new ListMapper(amazonRequest.AccessKeyId, amazonRequest.AssociateTag, amazonRequest.SecretAccessKey, amazonRequest.ListId);
 
-                using (listMapper)
+                listItems = listMapper.GetList();
+
+                foreach (var error in listMapper.GetErrors())
                 {
-                    listItems = listMapper.GetList();
-
-                    foreach (var error in listMapper.GetErrors())
-                    {
-                        errors.Add(error);
-                    }
-
+                    errors.Add(error);
                 }
 
-                var productMapper = new ProductMapper(amazonRequest.AWSAccessKeyId, amazonRequest.AssociateTag);
+                var productMapper = new ProductMapper(amazonRequest.AccessKeyId, amazonRequest.AssociateTag, amazonRequest.SecretAccessKey);
 
-                using (productMapper)
+                products = productMapper.GetProducts(listItems.ConvertAll(listItem => listItem.ASIN));
+
+                foreach (var error in productMapper.GetErrors())
                 {
-                    products = productMapper.GetProducts(listItems.ConvertAll(listItem => listItem.ASIN));
-
-                    foreach (var error in productMapper.GetErrors())
-                    {
-                        errors.Add(error);
-                    }
+                    errors.Add(error);
                 }
             }
             catch(Exception ex)

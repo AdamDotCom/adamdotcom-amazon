@@ -13,12 +13,7 @@ namespace AdamDotCom.Amazon.UnitTests
         [Test]
         public void ShouldMapRealAmazonDataTogether()
         {
-            var amazonRequest = new AmazonRequest
-                                    {
-                                        AssociateTag = "adamkahtavaap-20",
-                                        AWSAccessKeyId = "1MRFMGASE6CQKS2WTMR2",
-                                        ListId = "3JU6ASKNUS7B8"
-                                    };
+            var amazonRequest = TestHelper.ValidAmazonRequest;
 
             productListMapper = new ProductListMapper(amazonRequest);
 

@@ -13,12 +13,14 @@ namespace AdamDotCom.Amazon.UnitTests
         [TestFixtureSetUp]
         protected void SetUp()
         {
-            listMapper = new ListMapper("1MRFMGASE6CQKS2WTMR2", "adamkahtavaap-20", "3JU6ASKNUS7B8");
+            listMapper = new ListMapper(TestHelper.AwsAccessKey, TestHelper.AssociateTag, TestHelper.SecretAccessKey, "3JU6ASKNUS7B8");
         }
 
         [Test]
         public void ShouldBeAbleToGetListItemsFromAmazon()
         {
+            listMapper = new ListMapper(TestHelper.AwsAccessKey, TestHelper.AssociateTag, TestHelper.SecretAccessKey, "3JU6ASKNUS7B8");
+
             var listItems = listMapper.GetList();
 
             Assert.AreNotEqual(0, listItems.Count);
