@@ -16,9 +16,6 @@
 	
 	<target name="compile" description="compiles the library DLLs used by the application" depends="clean">
 		<csc target="library" output="..\Final-Assemblies\AdamDotCom.Amazon.dll" debug="false" warninglevel="0" >
-		  <references>
-				<include name="..\Dependencies\*.dll" />
-			</references>
 			<sources>
 				<include name="..\Source\WebServiceTranslator\**\*.cs"/>
 				<include name="..\Source\Domain\**\*.cs"/>
