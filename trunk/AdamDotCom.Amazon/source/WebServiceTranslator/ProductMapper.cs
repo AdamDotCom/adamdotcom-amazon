@@ -115,7 +115,7 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
         {
             foreach (ErrorsError error in listErrors)
             {
-                errors.Add(new KeyValuePair<string, string>(error.Code, error.Message));
+                errors.Add(new KeyValuePair<string, string>(error.Code, "ProductMapper: " + error.Message));
             }
         }
     }

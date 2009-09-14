@@ -8,18 +8,10 @@ namespace AdamDotCom.Amazon.UnitTests
     [TestFixture]
     public class ListMapperTest
     {
-        private IListMapper listMapper;
-
-        [TestFixtureSetUp]
-        protected void SetUp()
-        {
-            listMapper = new ListMapper(TestHelper.AwsAccessKey, TestHelper.AssociateTag, TestHelper.SecretAccessKey, "3JU6ASKNUS7B8");
-        }
-
         [Test]
         public void ShouldBeAbleToGetListItemsFromAmazon()
         {
-            listMapper = new ListMapper(TestHelper.AwsAccessKey, TestHelper.AssociateTag, TestHelper.SecretAccessKey, "3JU6ASKNUS7B8");
+            var listMapper = new ListMapper(TestHelper.AwsAccessKey, TestHelper.AssociateTag, TestHelper.SecretAccessKey, "3JU6ASKNUS7B8");
 
             var listItems = listMapper.GetList();
 
@@ -35,8 +27,28 @@ namespace AdamDotCom.Amazon.UnitTests
         }
 
         [Test]
+        public void ShouldBeAbleToGetListItemsFromAmazonNoPaging()
+        {
+            var listMapper = new ListMapper(TestHelper.AwsAccessKey, TestHelper.AssociateTag, TestHelper.SecretAccessKey, "1RVDGPM8SWXG4");
+
+            var listItems = listMapper.GetList();
+
+            Assert.AreNotEqual(0, listItems.Count);
+
+            Assert.Greater(listItems.Count, 4);
+
+            foreach (var item in listItems)
+            {
+                Assert.IsFalse((string.IsNullOrEmpty(item.ASIN)));
+                Debug.WriteLine(item.ASIN);
+            }
+        }
+
+        [Test]
         public void ShouldBeAbleToGetListItemsFromAmazonWithNoErrors()
         {
+            var listMapper = new ListMapper(TestHelper.AwsAccessKey, TestHelper.AssociateTag, TestHelper.SecretAccessKey, "3JU6ASKNUS7B8");
+
             listMapper.GetList();
 
             var errors = listMapper.GetErrors();
