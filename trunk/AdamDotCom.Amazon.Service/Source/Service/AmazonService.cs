@@ -89,9 +89,10 @@ namespace AdamDotCom.Amazon.Service
             return new AmazonRequest
             {
                 AssociateTag = "adamkahtavaap-20",
-                AWSAccessKeyId = "1MRFMGASE6CQKS2WTMR2",
+                AccessKeyId = "1MRFMGASE6CQKS2WTMR2",
                 CustomerId = customerId,
-                ListId = listId
+                ListId = listId,
+                SecretAccessKey = "XQDk151teVewB/F2wKQkUEb98aIzZYE1sA/lCrt0"
             };
         }
 
