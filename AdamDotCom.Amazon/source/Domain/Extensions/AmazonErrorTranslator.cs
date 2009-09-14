@@ -10,11 +10,11 @@ namespace AdamDotCom.Amazon.Domain.Extensions
             {
                 if (error.Value.Contains("CustomerId"))
                 {
-                    return new KeyValuePair<string, string>("CustomerId", error.Value);
+                    return new KeyValuePair<string, string>("customerId", error.Value);
                 }
                 if (error.Value.Contains("ListId"))
                 {
-                    return new KeyValuePair<string, string>("ListId", error.Value);
+                    return new KeyValuePair<string, string>("listId", error.Value);
                 }
             }
             return error;
