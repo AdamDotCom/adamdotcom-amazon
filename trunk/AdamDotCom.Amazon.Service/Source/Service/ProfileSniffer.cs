@@ -33,46 +33,6 @@ namespace AdamDotCom.Amazon.Service
             }
         }
 
-        public string GetListId()
-        {
-            var wishlistRegex = new Regex("ref=cm_psrch_wishl?(.*)&id=(?<ListId>(.*))\" title=\"View Wish List\"");
-
-            var listId = GetTokenString(wishlistRegex, "ListId");
-
-            if (string.IsNullOrEmpty(listId))
-            {
-                wishlistRegex = new Regex("/wishlist/(?<ListId>(.*))/ref=cm_pdp_wish_all_itms");
-
-                listId = GetTokenString(wishlistRegex, "ListId");
-            }
-            if (string.IsNullOrEmpty(listId))
-            {
-                AddNotFoundError("ListId");
-            }
-
-            return listId;
-        }
-
-        public string GetCustomerId()
-        {
-            var reviewsRegex = new Regex("member-reviews/(?<CustomerId>(.*))/ref=cm_psrch_reviews");
-
-            var customerId = GetTokenString(reviewsRegex, "CustomerId");
-
-            if(string.IsNullOrEmpty(customerId))
-            {
-                reviewsRegex = new Regex("profile/(?<CustomerId>(.*))\"");
-
-                customerId = GetTokenString(reviewsRegex, "CustomerId");                
-            }
-            if (string.IsNullOrEmpty(customerId))
-            {
-                AddNotFoundError("CustomerId");
-            }
-
-            return customerId;
-        }
-
         private void AddNotFoundError(string token)
         {
             Errors.Add(new KeyValuePair<string, string>(token, string.Format("{0} could not be found", token)));
@@ -99,6 +59,34 @@ namespace AdamDotCom.Amazon.Service
                 }
             }
             return null;
+        }
+
+        public Profile GetProfile()
+        {
+            var wishlistRegex = new Regex("ref=cm_psrch_wishl?(.*)&id=(?<ListId>(.*))\" title=\"View Wish List\"");
+            var listId = GetTokenString(wishlistRegex, "ListId");
+
+            var reviewsRegex = new Regex("member-reviews/(?<CustomerId>(.*))/ref=cm_psrch_reviews");
+            var customerId = GetTokenString(reviewsRegex, "CustomerId");
+
+            if (string.IsNullOrEmpty(listId) || string.IsNullOrEmpty(customerId))
+            {
+                wishlistRegex = new Regex("/wishlist/(?<ListId>(.*))/ref=cm_pdp_wish_all_itms");
+                listId = GetTokenString(wishlistRegex, "ListId");
+
+                reviewsRegex = new Regex("profile/(?<CustomerId>(.*))/ref=cm_pdp_profile_tag_interesting");
+                customerId = GetTokenString(reviewsRegex, "CustomerId");                
+            }
+            if (string.IsNullOrEmpty(listId))
+            {
+                AddNotFoundError("ListId");
+            }
+            if (string.IsNullOrEmpty(customerId))
+            {
+                AddNotFoundError("CustomerId");
+            }
+
+            return new Profile {CustomerId = customerId, ListId = listId};
         }
     }
 }

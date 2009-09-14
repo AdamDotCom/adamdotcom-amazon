@@ -10,50 +10,64 @@ namespace Unit.Tests
         public class AmazonServiceTests
         {
             [Test]
-            public void ShouldVerifyCustomerIdCanBeFoundMultipleResults()
+            public void ShouldVerifyProfileCanBeFoundMultipleResults()
             {
                 var profileSniffer = new ProfileSniffer("Adam Kahtava");
-                Assert.AreEqual("A2JM0EQJELFL69", profileSniffer.GetCustomerId());
+                var profile = profileSniffer.GetProfile();
+
+                Assert.AreEqual("A2JM0EQJELFL69", profile.CustomerId);
+                Assert.AreEqual("3JU6ASKNUS7B8", profile.ListId);
             }
 
             [Test]
-            public void ShouldVerifyWishListIdCanBeFoundFromMultipleResults()
+            public void ShouldVerifyProfileCanBeFoundMultipleResultsWithSpecialCharacters()
             {
-                var profileSniffer = new ProfileSniffer("Adam Kahtava");
-                Assert.AreEqual("3JU6ASKNUS7B8", profileSniffer.GetListId());
+                var profileSniffer = new ProfileSniffer("Adam-Kahtava");
+                var profile = profileSniffer.GetProfile();
+
+                Assert.AreEqual("A2JM0EQJELFL69", profile.CustomerId);
+                Assert.AreEqual("3JU6ASKNUS7B8", profile.ListId);
+
+                profileSniffer = new ProfileSniffer("Adam%20Kahtava");
+                profile = profileSniffer.GetProfile();
+
+                Assert.AreEqual("A2JM0EQJELFL69", profile.CustomerId);
+                Assert.AreEqual("3JU6ASKNUS7B8", profile.ListId);
             }
 
             [Test]
-            public void ShouldVerifyWishListIdCanBeFoundSingleResult()
+            public void ShouldVerifyProfileCanBeFoundSingleResult()
             {
                 var profileSniffer = new ProfileSniffer("Joel Spolsky");
-                Assert.AreEqual("AC49KE006R2ZU", profileSniffer.GetCustomerId());
-                Assert.AreEqual("1RVDGPM8SWXG4", profileSniffer.GetListId());
+                var profile = profileSniffer.GetProfile();
+
+                Assert.AreEqual("AC49KE006R2ZU", profile.CustomerId);
+                Assert.AreEqual("1RVDGPM8SWXG4", profile.ListId);
             }
 
             [Test]
             public void ShouldReturnErrorsWhenUserNotFound()
             {
                 var profileSniffer = new ProfileSniffer("gonzo the great and cookie monster");
-                var listId = profileSniffer.GetListId();
-                var customerId = profileSniffer.GetCustomerId();
+                var profile = profileSniffer.GetProfile();
+
+                Debug.WriteLine(profile.CustomerId);
+                Debug.WriteLine(profile.ListId);
 
                 foreach (var error in profileSniffer.Errors)
                 {
                     Debug.WriteLine(error);
                 }
 
-                Assert.AreEqual(1, profileSniffer.Errors.Count);
+                Assert.AreEqual(2, profileSniffer.Errors.Count);
             }
 
             [Test]
             public void ShouldReturnErrorsWhenPageSourceNotFound()
             {
                 var profileSniffer = new ProfileSniffer();
+                profileSniffer.GetProfile();
                 
-                var listId = profileSniffer.GetListId();
-                var customerId = profileSniffer.GetCustomerId();
-
                 foreach (var error in profileSniffer.Errors)
                 {
                     Debug.WriteLine(error);
