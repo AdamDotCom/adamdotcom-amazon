@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AdamDotCom.Amazon.WebServiceTranslator</RootNamespace>
     <AssemblyName>AdamDotCom.Amazon.WebServiceTranslator</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -32,21 +32,30 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Web.Services3, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Dependencies\Microsoft.Web.Services3.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.ServiceModel, Version=3.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Dependencies\System.ServiceModel.dll</HintPath>
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AmazonHmacAssertion.cs" />
-    <Compile Include="AWSECommerceService.cs" />
-    <Compile Include="AWSECommerceServiceInstance.cs" />
+    <Compile Include="Infrastructure\AmazonHeader.cs" />
+    <Compile Include="Infrastructure\AmazonSigningEndpointBehavior.cs" />
+    <Compile Include="Infrastructure\AmazonSigningMessageInspector.cs" />
+    <Compile Include="Infrastructure\AWSECommerceService.cs" />
+    <Compile Include="Infrastructure\AWSECommerceServiceInstance.cs" />
     <Compile Include="Interfaces\IListItemDTO.cs" />
     <Compile Include="Interfaces\IListMapper.cs" />
     <Compile Include="Interfaces\IProductDTO.cs" />

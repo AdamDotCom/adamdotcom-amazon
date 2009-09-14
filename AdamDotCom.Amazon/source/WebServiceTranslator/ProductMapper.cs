@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using AdamDotCom.Amazon.WebServiceTranslator;
-using AdamDotCom.Amazon.WebServiceTranslator.com.amazon.webservices;
+using AdamDotCom.Amazon.WebServiceTranslator.Infrastructure;
 using AdamDotCom.Amazon.WebServiceTranslator.Interfaces;
 
 namespace AdamDotCom.Amazon.WebServiceTranslator
@@ -13,7 +13,7 @@ namespace AdamDotCom.Amazon.WebServiceTranslator
 
         public ProductMapper(string accessKeyId, string associateTag, string secretAccessKey)
         {
-            AWSECommerceServiceInstance.SetPolicy(accessKeyId, secretAccessKey);
+            AWSECommerceServiceInstance.SetCredentials(accessKeyId, secretAccessKey);
 
             this.awsAccessKeyId = accessKeyId;
             this.associateTag = associateTag;
