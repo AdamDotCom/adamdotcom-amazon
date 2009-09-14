@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
 using System.Net;
 using AdamDotCom.Amazon.Domain;
 using AdamDotCom.Amazon.Domain.Interfaces;
@@ -9,106 +12,142 @@ namespace AdamDotCom.Amazon.Service
 {
     public class AmazonService : IAmazon
     {
-        public Reviews ReviewsXml(string CustomerId)
-        {
-            return Reviews(CustomerId);
-        }
-
-        public Reviews ReviewsJson(string customerId)
+        public Reviews ReviewsByCustomerIdXml(string customerId)
         {
             return Reviews(customerId);
         }
 
-        public Wishlist WishlistXml(string ListId)
+        public Reviews ReviewsByCustomerIdJson(string customerId)
         {
-            return Wishlist(ListId);
+            return Reviews(customerId);
         }
 
-        public Wishlist WishlistJson(string ListId)
+        public Reviews ReviewsByUsernameXml(string username)
         {
-            return Wishlist(ListId);
+            return Reviews(DiscoverUser(username).CustomerId);
         }
 
-        public Profile DiscoverUserXml(string Username)
+        public Reviews ReviewsByUsernameJson(string username)
         {
-            return DiscoverUser(Username);
+            return Reviews(DiscoverUser(username).CustomerId);
         }
 
-        public Profile DiscoverUserJson(string Username)
+        public Wishlist WishlistByListIdXml(string listId)
         {
-            return DiscoverUser(Username);
+            return Wishlist(listId);
         }
 
-        private static Reviews Reviews(string CustomerId)
+        public Wishlist WishlistByListIdJson(string listId)
         {
-            if(ServiceCache.IsInCache(CustomerId))
+            return Wishlist(listId);
+        }
+
+        public Wishlist WishlistByUsernameXml(string username)
+        {
+            return Wishlist(DiscoverUser(username).ListId);
+        }
+
+        public Wishlist WishlistByUsernameJson(string username)
+        {
+            return Wishlist(DiscoverUser(username).ListId);
+        }
+
+        public Profile DiscoverUsernameXml(string username)
+        {
+            return DiscoverUser(username);
+        }
+
+        public Profile DiscoverUsernameJson(string username)
+        {
+            return DiscoverUser(username);
+        }
+
+        private static Reviews Reviews(string customerId)
+        {
+            AssertValidInput(customerId, "customerId");
+
+            if(ServiceCache.IsInCache(customerId))
             {
-                return (Reviews) ServiceCache.GetFromCache(CustomerId);
+                return (Reviews) ServiceCache.GetFromCache(customerId);
             }
             
-            var amazonResponse = new AmazonFactory(BuildRequest(CustomerId, null)).GetResponse();
+            var amazonResponse = new AmazonFactory(BuildRequest(customerId, null)).GetResponse();
 
-            HandleErrors(amazonResponse);
+            HandleErrors(amazonResponse.Errors);
 
-            return new Reviews(amazonResponse.Reviews.OrderByDescending(r => r.Date)).AddToCache(CustomerId);
+            return new Reviews(amazonResponse.Reviews.OrderByDescending(r => r.Date)).AddToCache(customerId);
         }
 
-        private static Wishlist Wishlist(string ListId)
+        private static Wishlist Wishlist(string listId)
         {
-            if(ServiceCache.IsInCache(ListId))
+            AssertValidInput(listId, "listId");
+
+            if(ServiceCache.IsInCache(listId))
             {
-                return (Wishlist) ServiceCache.GetFromCache(ListId);
+                return (Wishlist) ServiceCache.GetFromCache(listId);
             }
 
-            var amazonResponse = new AmazonFactory(BuildRequest(null, ListId)).GetResponse();
+            var amazonResponse = new AmazonFactory(BuildRequest(null, listId)).GetResponse();
 
-            HandleErrors(amazonResponse);
+            HandleErrors(amazonResponse.Errors);
 
-            return new Wishlist(amazonResponse.Products.OrderBy(p => p.AuthorsMLA).ThenBy(p => p.Title)).AddToCache(ListId);
+            return new Wishlist(amazonResponse.Products.OrderBy(p => p.AuthorsMLA).ThenBy(p => p.Title)).AddToCache(listId);
         }
 
-        private static Profile DiscoverUser(string Username)
+        private static Profile DiscoverUser(string username)
         {
-            if (ServiceCache.IsInCache(Username))
+            AssertValidInput(username, "username");
+
+            username = Scrub(username);
+
+            if (ServiceCache.IsInCache(username))
             {
-                return (Profile) ServiceCache.GetFromCache(Username);
+                return (Profile) ServiceCache.GetFromCache(username);
             }
 
-            var sniffer = new ProfileSniffer(Username);
+            var sniffer = new ProfileSniffer(username);
 
-            var customerId = sniffer.GetCustomerId();
-            var listId = sniffer.GetListId();
+            var profile = sniffer.GetProfile();
             
-            HandleErrors(sniffer);
+            HandleErrors(sniffer.Errors);
 
-            return new Profile {CustomerId = customerId, ListId = listId}.AddToCache(Username);
+            return profile.AddToCache(username);
+        }
+
+        private static string Scrub(string username)
+        {
+            return username.Replace(" ", "%20").Replace("-", " ");
         }
 
         private static AmazonRequest BuildRequest(string customerId, string listId)
         {
             return new AmazonRequest
             {
-                AssociateTag = "adamkahtavaap-20",
-                AccessKeyId = "1MRFMGASE6CQKS2WTMR2",
+                AssociateTag = ConfigurationManager.AppSettings["AssociateTag"],
+                AccessKeyId = ConfigurationManager.AppSettings["AwsAccessKey"],
                 CustomerId = customerId,
                 ListId = listId,
-                SecretAccessKey = "XQDk151teVewB/F2wKQkUEb98aIzZYE1sA/lCrt0"
+                SecretAccessKey = ConfigurationManager.AppSettings["SecretAccessKey"]
             };
         }
 
-        private static void HandleErrors(IAmazonResponse amazonResponse)
+        private static void AssertValidInput(string inputValue, string inputName)
         {
-            if (amazonResponse.Errors != null && amazonResponse.Errors.Count != 0)
+            inputName = (string.IsNullOrEmpty(inputName) ? "Unknown" : inputName);
+
+            if (string.IsNullOrEmpty(inputValue) || inputValue.Equals("null", StringComparison.CurrentCultureIgnoreCase))
             {
-                throw new RestException(HttpStatusCode.BadRequest, amazonResponse.Errors, (int) ErrorCode.InternalError);
+                throw new RestException(HttpStatusCode.BadRequest,
+                                        new List<KeyValuePair<string, string>> { new KeyValuePair<string, string>(inputName, string.Format("{0} is not a valid value.", inputValue)) },
+                                        (int)ErrorCode.InternalError);
             }
         }
 
-        private static void HandleErrors(ProfileSniffer sniffer)
+        private static void HandleErrors(List<KeyValuePair<string, string>> errors)
         {
-            if(sniffer.Errors != null && sniffer.Errors.Count != 0)
+            if(errors != null && errors.Count != 0)
             {
-                throw new RestException(HttpStatusCode.BadRequest, sniffer.Errors, (int)ErrorCode.InternalError);
+                throw new RestException(HttpStatusCode.BadRequest, errors, (int)ErrorCode.InternalError);
             }
         }
     }

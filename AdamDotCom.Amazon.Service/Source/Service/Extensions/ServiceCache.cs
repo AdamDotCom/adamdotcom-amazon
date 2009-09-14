@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Web;
 using System.Web.Caching;
 
@@ -7,6 +8,7 @@ namespace AdamDotCom.Amazon.Service.Extensions
     public static class ServiceCache
     {
         private static Cache cache = HttpRuntime.Cache;
+        private static readonly bool enableCache = Convert.ToBoolean(ConfigurationManager.AppSettings["EnableCaching"]);
 
         public static bool IsInCache(string key)
         {
@@ -45,7 +47,10 @@ namespace AdamDotCom.Amazon.Service.Extensions
 
         private static void AddToCache(string key, object cacheObject)
         {
-            cache.Insert(key, cacheObject, null, DateTime.Now.AddDays(1d), Cache.NoSlidingExpiration);
+            if (enableCache)
+            {
+                cache.Insert(key, cacheObject, null, DateTime.Now.AddDays(1d), Cache.NoSlidingExpiration);
+            }
         }
     }
 }
