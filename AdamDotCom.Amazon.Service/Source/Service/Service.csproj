@@ -61,7 +61,7 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions\Cache.cs" />
+    <Compile Include="Extensions\ServiceCache.cs" />
     <Compile Include="ProfileSniffer.cs" />
     <Compile Include="AmazonService.cs" />
     <Compile Include="ErrorCode.cs" />
