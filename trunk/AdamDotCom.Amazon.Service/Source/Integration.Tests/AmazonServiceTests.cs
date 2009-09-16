@@ -31,7 +31,6 @@ namespace AdamDotCom.Amazon.Service.Integration.Tests
             var reviewsFromXmlRequest = amazonService.ReviewsByCustomerIdXml("A2JM0EQJELFL69");
 
             Assert.IsNotNull(reviewsFromXmlRequest);
-            Assert.IsNotNull(reviewsFromXmlRequest.Count);
             Assert.Greater(reviewsFromXmlRequest.Count, 1);
             
             var reviewsFromJsonRequest = amazonService.ReviewsByCustomerIdJson("A2JM0EQJELFL69");
@@ -40,7 +39,7 @@ namespace AdamDotCom.Amazon.Service.Integration.Tests
             Assert.AreEqual(reviewsFromXmlRequest.Count, reviewsFromJsonRequest.Count);
         }
 
-        [Test, Ignore]
+        [Test]
         public void ShouldVerifyProxyAndReturnWishlist()
         {
             var amazonService = new AmazonService();
@@ -52,6 +51,7 @@ namespace AdamDotCom.Amazon.Service.Integration.Tests
 
             var wishlistFromJsonRequest = amazonService.WishlistByListIdXml("3JU6ASKNUS7B8");
 
+            Assert.IsNotNull(wishlistFromJsonRequest);
             Assert.AreEqual(wishlistFromXmlRequest.Count, wishlistFromJsonRequest.Count);
         }
 

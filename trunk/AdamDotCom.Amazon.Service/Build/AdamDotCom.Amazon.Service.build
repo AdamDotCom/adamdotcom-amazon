@@ -78,15 +78,27 @@
 			</sources>
 		</csc>
 		<copy file="..\Source\Integration.Tests\App.config" tofile="bin\${project::get-name()}.Integration.Tests.dll.config" />	
+		<csc target="library" output="bin\${project::get-name()}.Unit.Tests.dll" debug="false">
+			<references>
+				<include name="..\Final-Assemblies\*.dll" />
+				<include name="..\Dependencies\nunit\bin\*.dll" />
+			</references>
+			<sources>
+				<include name="..\Source\Unit.Tests\**\*.cs" />
+			</sources>
+		</csc>
 	</target>
 	
 	<target name="test" description="runs the unit tests" depends="test.compile">
 		<echo message="Executing unit tests..."/>
 		<exec basedir="..\Dependencies\nunit\bin"
-			
 			workingdir="bin"
 			program="nunit-console.exe"
-			commandline="${project::get-name()}.Integration.Tests.dll /xml=${project::get-name()}.UnitTests-Result.xml" />	
+			commandline="${project::get-name()}.Integration.Tests.dll /xml=${project::get-name()}.Integration.Tests.Results.xml" />	
+		<exec basedir="..\Dependencies\nunit\bin"
+			workingdir="bin"
+			program="nunit-console.exe"
+			commandline="${project::get-name()}.Unit.Tests.dll /xml=${project::get-name()}.Unit.Tests.Results.xml" />	
 	</target>
 
 </project>
