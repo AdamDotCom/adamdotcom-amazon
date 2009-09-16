@@ -69,13 +69,15 @@
 	<target name="test.compile" description="compiles the unit tests" depends="compile test.prepare">
 		<csc target="library" output="bin\${project::get-name()}.Integration.Tests.dll" debug="false">
 			<references>
-				<include name="..\Final-Assemblies\*.dll" />
+				<include name="..\Final-Assemblies\*.Proxy.dll" />
+				<include name="..\Final-Assemblies\*.Amazon.dll" />
 				<include name="..\Dependencies\nunit\bin\*.dll" />
 			</references>
 			<sources>
 				<include name="..\Source\Integration.Tests\**\*.cs" />
 			</sources>
 		</csc>
+		<copy file="..\Source\Integration.Tests\App.config" tofile="bin\${project::get-name()}.Integration.Tests.dll.config" />	
 	</target>
 	
 	<target name="test" description="runs the unit tests" depends="test.compile">
