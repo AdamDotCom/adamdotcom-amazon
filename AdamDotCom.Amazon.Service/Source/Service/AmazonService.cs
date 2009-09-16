@@ -4,7 +4,6 @@ using System.Configuration;
 using System.Linq;
 using System.Net;
 using AdamDotCom.Amazon.Domain;
-using AdamDotCom.Amazon.Domain.Interfaces;
 using AdamDotCom.Amazon.Service.Extensions;
 using AdamDotCom.Amazon.Service.Utilities;
 
