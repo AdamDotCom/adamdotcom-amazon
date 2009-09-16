@@ -12,18 +12,11 @@
       </fileset>
     </delete>
   </target>
-  
-  <target name="copy-dependencies">
-    <copy todir="..\Final-Assemblies">
-      <fileset basedir="..\Dependencies">
-        <include name="AdamDotCom.Amazon.dll" />
-      </fileset>
-    </copy>
-  </target>
 
-  <target name="compile" description="compiles the library DLLs used by the application" depends="clean copy-dependencies">
+  <target name="compile" description="compiles the library DLLs used by the application" depends="clean">
     <csc target="library" output="..\Final-Assemblies\AdamDotCom.Amazon.Service.dll" debug="false" warninglevel="0" >
       <references>
+        <include name="..\Dependencies\*.Amazon.dll" />
         <include name="..\Final-Assemblies\*.dll" />
       </references>
       <sources>
@@ -40,6 +33,7 @@
     </csc>
     <csc target="library" output="..\Final-Assemblies\AdamDotCom.Amazon.Service.Proxy.dll" debug="false" warninglevel="0" >
       <references>
+        <include name="..\Dependencies\*.Amazon.dll" />
         <include name="..\Final-Assemblies\*.dll" />
       </references>
       <sources>
@@ -55,8 +49,8 @@
       </fileset>
     </delete>
     <copy todir="bin" flatten="true">
-      <fileset basedir="..\Dependencies\nunit\bin">
-        <include name="*.dll" />
+      <fileset basedir="..\Dependencies">
+        <include name="\**\*.dll" />
       </fileset>
     </copy>
     <copy todir="bin" flatten="true">
@@ -70,7 +64,7 @@
     <csc target="library" output="bin\${project::get-name()}.Integration.Tests.dll" debug="false">
       <references>
         <include name="..\Final-Assemblies\*.Proxy.dll" />
-        <include name="..\Final-Assemblies\*.Amazon.dll" />
+        <include name="..\Dependencies\*.Amazon.dll" />
         <include name="..\Dependencies\nunit\bin\*.dll" />
       </references>
       <sources>
